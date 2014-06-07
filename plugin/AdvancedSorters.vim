@@ -12,6 +12,8 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	002	08-Jun-2014	Have :SortBy... commands check for buffer
+"				modifiablity and handle errors, too.
 "	001	08-Jun-2014	file creation
 
 " Avoid installing twice or when in unsupported Vim version.
@@ -19,10 +21,25 @@ if exists('g:loaded_AdvancedSorters') || (v:version < 700)
     finish
 endif
 let g:loaded_AdvancedSorters = 1
+let s:save_cpo = &cpo
+set cpo&vim
 
-command! -bang -range=% -nargs=* SortUnfolded call setline(<line1>, getline(<line1>)) | if ! AdvancedSorters#Ranges#Unfolded('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
-command! -bang -range=% -nargs=1 -complete=expression SortByExpr <line1>,<line2>call AdvancedSorters#Expr#Sort(<bang>0, <q-args>)
-command! -bang -range=% SortByCharLength <line1>,<line2>call AdvancedSorters#Expr#Sort(<bang>0, function('ingo#compat#strchars'))
-command! -bang -range=% SortByWidth <line1>,<line2>call AdvancedSorters#Expr#Sort(<bang>0, function('ingo#compat#strdisplaywidth'))
+command! -bang -range=% -nargs=* SortUnfolded
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Ranges#Unfolded('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
 
+command! -bang -range=% -nargs=1 -complete=expression SortByExpr
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Expr#Sort(<line1>, <line2>, <bang>0, <q-args>) | echoerr ingo#err#Get() | endif
+
+command! -bang -range=% SortByCharLength
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Expr#Sort(<line1>, <line2>, <bang>0, function('ingo#compat#strchars')) | echoerr ingo#err#Get() | endif
+
+command! -bang -range=% SortByWidth
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Expr#Sort(<line1>, <line2>, <bang>0, function('ingo#compat#strdisplaywidth')) | echoerr ingo#err#Get() | endif
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
