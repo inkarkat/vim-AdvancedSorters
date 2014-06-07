@@ -1,0 +1,111 @@
+*AdvancedSorters.txt*   Sorting of certain areas or by special needs.
+
+		      ADVANCED SORTERS    by Ingo Karkat
+							 *AdvancedSorters.vim*
+description			|AdvancedSorters-description|
+usage				|AdvancedSorters-usage|
+installation			|AdvancedSorters-installation|
+configuration			|AdvancedSorters-configuration|
+integration			|AdvancedSorters-integration|
+limitations			|AdvancedSorters-limitations|
+known problems			|AdvancedSorters-known-problems|
+todo				|AdvancedSorters-todo|
+history				|AdvancedSorters-history|
+
+==============================================================================
+DESCRIPTION					 *AdvancedSorters-description*
+
+This plugin ...
+
+HOW IT WORKS								     *
+
+SOURCE									     *
+
+- :SortUnfolded inspired by
+  http://stackoverflow.com/questions/13554191/sorting-vim-folds
+- :SortByExpr inspired by
+  http://stackoverflow.com/questions/11531073/how-do-you-sort-a-range-of-lines-by-length
+
+SEE ALSO								     *
+(Plugins offering complementary functionality, or plugins using this library.)
+
+RELATED WORKS								     *
+(Alternatives from other authors, other approaches, references not used here.)
+
+==============================================================================
+USAGE						       *AdvancedSorters-usage*
+							       *:SortUnfolded*
+:[range]SortUnfolded[!] [i][u][r][n][x][o] [/{pattern}/]
+			Sort visible lines in [range]. Lines inside closed
+			folds are kept intact; sorting is done on all lines of
+			the fold as one unit; i.e. the order of the other
+			lines inside the fold does _not_ change!
+			Note: The text must not contain embedded <Nul>
+			characters (^@)!
+								 *:SortByExpr*
+:[range]SortByExpr[!] {expr}
+			Sort lines in [range] by the {expr}, which should take
+			the current line as input via v:val and return a
+			number. With [!] the order is reversed.
+							   *:SortByCharLength*
+:[range]SortByCharLength[!]
+			Sort lines in [range] by the number of characters.
+								*:SortByWidth*
+:[range]SortByWidth[!]
+			Sort lines in [range] by the display width.
+
+EXAMPLE						     *AdvancedSorters-example*
+
+==============================================================================
+INSTALLATION					*AdvancedSorters-installation*
+
+This script is packaged as a |vimball|. If you have the "gunzip" decompressor
+in your PATH, simply edit the *.vmb.gz package in Vim; otherwise, decompress
+the archive first, e.g. using WinZip. Inside Vim, install by sourcing the
+vimball or via the |:UseVimball| command. >
+    vim AdvancedSorters*.vmb.gz
+    :so %
+To uninstall, use the |:RmVimball| command.
+
+DEPENDENCIES					*AdvancedSorters-dependencies*
+
+- Requires Vim 7.0 or higher.
+- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.020 or
+  higher.
+
+==============================================================================
+CONFIGURATION				       *AdvancedSorters-configuration*
+
+For a permanent configuration, put the following commands into your |vimrc|:
+configvar
+						       *AdvancedSorters-remap*
+plugmap
+
+==============================================================================
+INTEGRATION					 *AdvancedSorters-integration*
+
+==============================================================================
+LIMITATIONS					 *AdvancedSorters-limitations*
+
+KNOWN PROBLEMS				      *AdvancedSorters-known-problems*
+
+TODO							*AdvancedSorters-todo*
+
+IDEAS						       *AdvancedSorters-ideas*
+
+==============================================================================
+HISTORY						     *AdvancedSorters-history*
+
+GOAL
+First published version.
+
+0.01	18-Jul-2012
+Started development.
+
+==============================================================================
+Copyright: (C) 2012-2014 Ingo Karkat
+The VIM LICENSE applies to this plugin; see |copyright|.
+
+Maintainer:	Ingo Karkat <ingo@karkat.de>
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:
