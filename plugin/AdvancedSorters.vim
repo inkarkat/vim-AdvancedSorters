@@ -28,6 +28,11 @@ command! -bang -range=% -nargs=* SortUnfolded
 \   call setline(<line1>, getline(<line1>)) |
 \   if ! AdvancedSorters#Ranges#Unfolded('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
 
+command! -bang -range=% -nargs=+ SortRangesByHeader
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Ranges#ByHeader('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+
+
 command! -bang -range=% -nargs=1 -complete=expression SortByExpr
 \   call setline(<line1>, getline(<line1>)) |
 \   if ! AdvancedSorters#Expr#Sort(<line1>, <line2>, <bang>0, <q-args>) | echoerr ingo#err#Get() | endif
