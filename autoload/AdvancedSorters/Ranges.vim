@@ -10,6 +10,8 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	002	09-Jun-2014	Account for the reduced end line number when the
+"				"u" flag is passed and there are duplicate lines.
 "	001	08-Jun-2014	file creation from ingocommands.vim
 
 function! s:SortRanges( bang, startLnum, endLnum, sortArgs, rangeName, rangeNum, joinCnt )
@@ -19,14 +21,17 @@ function! s:SortRanges( bang, startLnum, endLnum, sortArgs, rangeName, rangeNum,
     endif
 
     let l:reducedEndLnum = a:endLnum - a:joinCnt
+    let l:lastLnum = line('$')  " When the "u" flag is passed, duplicate lines reduce the number of lines.
+    let l:sortOffset = 0        " Account for the reduced end line number when undoing the join.
     try
 	execute printf('%d,%dsort%s %s', a:startLnum, l:reducedEndLnum, a:bang, a:sortArgs)
+	let l:sortOffset = line('$') - l:lastLnum
 	return 1
     catch /^Vim\%((\a\+)\)\=:/
 	call ingo#err#SetVimException()
 	return 0
     finally
-	silent execute printf('%d,%dsubstitute/\%%d0/\r/g', a:startLnum, l:reducedEndLnum)
+	silent execute printf('%d,%dsubstitute/\%%d0/\r/g', a:startLnum, l:reducedEndLnum + l:sortOffset)
 	call histdel('search', -1)
     endtry
 endfunction
