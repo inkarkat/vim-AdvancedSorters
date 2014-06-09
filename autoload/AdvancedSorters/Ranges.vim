@@ -31,7 +31,7 @@ function! s:SortRanges( bang, startLnum, endLnum, sortArgs, rangeName, rangeNum,
 	call ingo#err#SetVimException()
 	return 0
     finally
-	silent execute printf('%d,%dsubstitute/\%%d0/\r/g', a:startLnum, l:reducedEndLnum + l:sortOffset)
+	silent execute printf('%d,%dsubstitute/\%%d0/\r/ge', a:startLnum, l:reducedEndLnum + l:sortOffset)
 	call histdel('search', -1)
     endtry
 endfunction
@@ -43,15 +43,16 @@ endfunction
 function! s:ParseExpressionAndSortArguments( arguments )
     return ingo#cmdargs#pattern#ParseUnescaped(a:arguments, '\s*\([iurnxo[:space:]]*\%(\([[:alnum:]\\"|]\@![\x00-\xFF]\)\(.\{-}\)\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\4\)\?\)')
 endfunction
-function! s:JoinRanges( bang, startLnum, endLnum, arguments, RangeCreator )
+function! s:JoinRanges( bang, startLnum, endLnum, arguments, rangeName, RangeCreator )
     let [l:expr, l:sortArgs] = s:ParseExpressionAndSortArguments(a:arguments)
 
     let l:ranges = call(a:RangeCreator, [a:startLnum, a:endLnum, l:expr])
 
     let [l:rangeNum, l:joinCnt] = ingo#join#Ranges(1, a:startLnum, a:endLnum, "\<C-v>\<C-j>", l:ranges)
 
-    return s:SortRanges(a:bang, a:startLnum, a:endLnum, l:sortArgs, 'ranges', l:rangeNum, l:joinCnt)
+    return s:SortRanges(a:bang, a:startLnum, a:endLnum, l:sortArgs, a:rangeName, l:rangeNum, l:joinCnt)
 endfunction
+
 function! s:ByHeader( startLnum, endLnum, expr )
     let l:headerLnums = []
     call cursor(a:startLnum, 1)
@@ -77,7 +78,34 @@ function! s:ByHeader( startLnum, endLnum, expr )
     return l:ranges
 endfunction
 function! AdvancedSorters#Ranges#ByHeader( bang, startLnum, endLnum, arguments )
-    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ByHeader'))
+    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, 'headers', function('s:ByHeader'))
+endfunction
+
+function! s:ByMatch( startLnum, endLnum, expr )
+    let l:ranges = []
+    call cursor(a:startLnum, 1)
+    while line('.') <= a:endLnum
+	let l:startLnum = search(a:expr, 'cW', a:endLnum)
+	if l:startLnum == 0
+	    break
+	endif
+	let l:endLnum = search(a:expr, 'ceW', a:endLnum)
+	if l:endLnum == 0
+	    break
+	endif
+
+	call add(l:ranges, [l:startLnum, l:endLnum])
+
+	if l:endLnum == a:endLnum
+	    break
+	else
+	    call cursor(l:endLnum + 1, 1)
+	endif
+    endwhile
+    return l:ranges
+endfunction
+function! AdvancedSorters#Ranges#ByMatch( bang, startLnum, endLnum, arguments )
+    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, 'matches', function('s:ByMatch'))
 endfunction
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
