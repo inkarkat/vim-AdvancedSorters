@@ -42,6 +42,25 @@ USAGE						       *AdvancedSorters-usage*
 			lines inside the fold does _not_ change!
 			Note: The text must not contain embedded <Nul>
 			characters (^@)!
+
+:[range]SortRangesByHeader[!] /{expr}/ [i][u][r][n][x][o] [/{pattern}/]
+			Each match of {expr} (in the buffer / [range]) starts
+			a new area that sorts as one unit; i.e. the order of
+			the other lines inside the area does _not_ change!
+
+:[range]SortRangesByMatch[!] /{expr}/ [i][u][r][n][x][o] [/{pattern}/]
+			Each (multi-line) match of {expr} (in the buffer /
+			[range]) defines an area that sorts as one unit.
+			Non-matching lines are sorted individually.
+
+:[range]SortRangesByRange[!] {range} [i][u][r][n][x][o] [/{pattern}/]
+			Each {range} (in the buffer / [range]) defines an area
+			that sorts as one unit.
+			Note: For this command, /{pattern}/ must be separated
+			from the {range} by one [i][u][r][n][x][o] flag or a
+			space; you cannot directly concatenate them.
+
+
 								 *:SortByExpr*
 :[range]SortByExpr[!] {expr}
 			Sort lines in [range] by the {expr}, which should take
