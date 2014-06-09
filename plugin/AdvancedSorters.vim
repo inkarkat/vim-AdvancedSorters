@@ -12,6 +12,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.00.003	10-Jun-2014	Add :SortRangesByRange command.
 "	002	08-Jun-2014	Have :SortBy... commands check for buffer
 "				modifiablity and handle errors, too.
 "	001	08-Jun-2014	file creation
@@ -31,6 +32,14 @@ command! -bang -range=% -nargs=* SortUnfolded
 command! -bang -range=% -nargs=+ SortRangesByHeader
 \   call setline(<line1>, getline(<line1>)) |
 \   if ! AdvancedSorters#Ranges#ByHeader('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+
+command! -bang -range=% -nargs=+ SortRangesByMatch
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Ranges#ByMatch('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+
+command! -bang -range=% -nargs=+ SortRangesByRange
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Ranges#ByRange('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
 
 
 command! -bang -range=% -nargs=1 -complete=expression SortByExpr
