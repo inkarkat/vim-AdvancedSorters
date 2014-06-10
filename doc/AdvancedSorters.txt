@@ -66,6 +66,11 @@ USAGE						       *AdvancedSorters-usage*
 			Sort lines in [range] by the {expr}, which should take
 			the current line as input via v:val and return a
 			number. With [!] the order is reversed.
+							   *:SortByExprUnique*
+:[range]SortByExprUnique[!] {expr}
+			Sort lines in [range] by the {expr}; only the first
+			line that gets a certain number from {expr} is kept.
+			With [!] the order is reversed.
 							   *:SortByCharLength*
 :[range]SortByCharLength[!]
 			Sort lines in [range] by the number of characters.
