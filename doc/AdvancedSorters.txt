@@ -5,8 +5,6 @@
 description			|AdvancedSorters-description|
 usage				|AdvancedSorters-usage|
 installation			|AdvancedSorters-installation|
-configuration			|AdvancedSorters-configuration|
-integration			|AdvancedSorters-integration|
 limitations			|AdvancedSorters-limitations|
 known problems			|AdvancedSorters-known-problems|
 todo				|AdvancedSorters-todo|
@@ -15,51 +13,70 @@ history				|AdvancedSorters-history|
 ==============================================================================
 DESCRIPTION					 *AdvancedSorters-description*
 
-This plugin ...
+The built-in |:sort| command is powerful, but it still is line-based. It
+doesn't take into account folded lines, nor can it sort entire blocks like
+function definitions, paragraphs, etc. But often, one needs to sort exactly
+such areas as single entities, i.e. without changing the line order within
+them. A workaround in Vim is condensing each block into a single line,
+performing the sorting, and then expanding again. (External, more powerful
+sort commands could be used, too.)
 
-HOW IT WORKS								     *
+This plugin implements this workaround and encapsulates the three separate
+steps in one handy command.
+
+
+While |:sort| has several flags for sorting on various numbers, and a
+/{pattern}/ can be specified to skip or sort on, it doesn't allow arbitrary
+(Vimscript) expressions.
+
+This plugin offers extension commands that evaluate an expression per line,
+put that number in front of the line, do a numerical sort, and then remove the
+temporary number again. Specializations handle the common sort by number of
+characters and by the line's display width.
 
 SOURCE									     *
 
 - :SortUnfolded inspired by
   http://stackoverflow.com/questions/13554191/sorting-vim-folds
+- :SortRangesByRange inspired by
+  http://superuser.com/questions/752032/how-do-i-sort-multiple-blocks-of-text-by-the-first-line-in-each-block-in-vim
 - :SortByExpr inspired by
   http://stackoverflow.com/questions/11531073/how-do-you-sort-a-range-of-lines-by-length
 
 SEE ALSO								     *
-(Plugins offering complementary functionality, or plugins using this library.)
 
-RELATED WORKS								     *
-(Alternatives from other authors, other approaches, references not used here.)
+- The |LineJuggler.vim| plugin (vimscript #4140) offers many quick mappings to
+  move around (blocks of) lines. For small data sets, manual shifting may be
+  quicker than coming up with a correct sort command.
 
 ==============================================================================
 USAGE						       *AdvancedSorters-usage*
 							       *:SortUnfolded*
 :[range]SortUnfolded[!] [i][u][r][n][x][o] [/{pattern}/]
-			Sort visible lines in [range]. Lines inside closed
-			folds are kept intact; sorting is done on all lines of
-			the fold as one unit; i.e. the order of the other
-			lines inside the fold does _not_ change!
-			Note: The text must not contain embedded <Nul>
-			characters (^@)!
-
+			Sort visible lines in the buffer / [range]. Lines
+			inside closed folds are kept intact; sorting is done
+			on all lines of the fold as one unit; i.e. the order
+			of the other lines inside the fold does _not_ change!
+							 *:SortRangesByHeader*
 :[range]SortRangesByHeader[!] /{expr}/ [i][u][r][n][x][o] [/{pattern}/]
 			Each match of {expr} (in the buffer / [range]) starts
 			a new area that sorts as one unit; i.e. the order of
 			the other lines inside the area does _not_ change!
-
+							  *:SortRangesByMatch*
 :[range]SortRangesByMatch[!] /{expr}/ [i][u][r][n][x][o] [/{pattern}/]
 			Each (multi-line) match of {expr} (in the buffer /
 			[range]) defines an area that sorts as one unit.
 			Non-matching lines are sorted individually.
-
+							  *:SortRangesByRange*
 :[range]SortRangesByRange[!] {range} [i][u][r][n][x][o] [/{pattern}/]
 			Each {range} (in the buffer / [range]) defines an area
 			that sorts as one unit.
 			Note: For this command, /{pattern}/ must be separated
-			from the {range} by one [i][u][r][n][x][o] flag or a
+			from the {range} by a [i][u][r][n][x][o] flag or a
 			space; you cannot directly concatenate them.
 
+			Note: The text must not contain embedded <Nul>
+			characters (^@) for the above commands!
 
 								 *:SortByExpr*
 :[range]SortByExpr[!] {expr}
@@ -78,8 +95,27 @@ USAGE						       *AdvancedSorters-usage*
 :[range]SortByWidth[!]
 			Sort lines in [range] by the display width.
 
+
 EXAMPLE						     *AdvancedSorters-example*
 
+We're taking any Vimscript file with multiple function definitions as an
+example, and show how to sort whole functions according to function name (and
+arguments).
+
+To use folding, we first have to define the folds, then trigger the sorting: >
+    :g/^function/,/^endfunction/fold
+    :SortUnfolded
+
+If we don't care about including any lines after the "endfunction", we can
+just base the areas on the function start: >
+    :SortRangesByHeader /^function/
+But we'll get better results with an explicit end. One way is to define a
+multi-line pattern that covers the entire function: >
+    :SortRangesByMatch /^function\_.\{-}\nendfunction$/
+Another way spans up a range, similar to what we've done above to define the
+folds: >
+    :SortRangesByRange /^function/,/^endfunction$/
+<
 ==============================================================================
 INSTALLATION					*AdvancedSorters-installation*
 
@@ -94,19 +130,8 @@ To uninstall, use the |:RmVimball| command.
 DEPENDENCIES					*AdvancedSorters-dependencies*
 
 - Requires Vim 7.0 or higher.
-- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.020 or
+- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.021 or
   higher.
-
-==============================================================================
-CONFIGURATION				       *AdvancedSorters-configuration*
-
-For a permanent configuration, put the following commands into your |vimrc|:
-configvar
-						       *AdvancedSorters-remap*
-plugmap
-
-==============================================================================
-INTEGRATION					 *AdvancedSorters-integration*
 
 ==============================================================================
 LIMITATIONS					 *AdvancedSorters-limitations*
@@ -120,7 +145,12 @@ IDEAS						       *AdvancedSorters-ideas*
 ==============================================================================
 HISTORY						     *AdvancedSorters-history*
 
-GOAL
+1.01	RELEASEME
+- Make :SortRangesByRange work for Vim versions before 7.4.218 that don't have
+  uniq().
+  *** You need to update to ingo-library (vimscript #4433) version 1.021! ***
+
+1.00	11-Jun-2014
 First published version.
 
 0.01	18-Jul-2012
