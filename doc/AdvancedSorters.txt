@@ -145,7 +145,7 @@ IDEAS						       *AdvancedSorters-ideas*
 ==============================================================================
 HISTORY						     *AdvancedSorters-history*
 
-1.01	RELEASEME
+1.01	10-Jul-2014
 - Make :SortRangesByRange work for Vim versions before 7.4.218 that don't have
   uniq().
   *** You need to update to ingo-library (vimscript #4433) version 1.021! ***
