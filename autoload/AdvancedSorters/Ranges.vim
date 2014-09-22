@@ -4,6 +4,7 @@
 "   - ingo/cmdargs/pattern.vim autoload script
 "   - ingo/cmdargs/range.vim autoload script
 "   - ingo/collections.vim autoload script
+"   - ingo/compat.vim autoload script
 "   - ingo/err.vim autoload script
 "   - ingo/join.vim autoload script
 "   - ingo/range/lines.vim autoload script
@@ -14,6 +15,8 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.01.004	11-Jun-2014	Make :SortRangesByRange work for Vim versions
+"				before 7.4.218 that don't have uniq().
 "   1.00.003	10-Jun-2014	Implement :SortRangesByRange command.
 "				Pass a:ArgumentParser to s:JoinRanges() to
 "				accommodate the different parsing for
@@ -149,7 +152,7 @@ function! s:ByRange( startLnum, endLnum, expr )
     " [startLnum, endLnum] list out of that.
     let [l:recordedLines, l:startLines, l:endLines, l:didClobberSearchHistory] = ingo#range#lines#Get(a:startLnum, a:endLnum, a:expr)
     let l:linesInRange = sort(map(keys(l:recordedLines), 'str2nr(v:val)'), 'ingo#collections#numsort')
-    call uniq(l:endLines)
+    call ingo#compat#uniq(l:endLines)
     let l:ranges = []
     while ! empty(l:endLines)
 	let l:startLnum = remove(l:linesInRange, 0)
