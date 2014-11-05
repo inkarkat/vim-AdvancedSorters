@@ -13,6 +13,7 @@
 "
 " REVISION	DATE		REMARKS
 "   1.00.003	10-Jun-2014	Add :SortRangesByRange command.
+"				Add :SortByExprUnique variant.
 "	002	08-Jun-2014	Have :SortBy... commands check for buffer
 "				modifiablity and handle errors, too.
 "	001	08-Jun-2014	file creation
@@ -44,15 +45,19 @@ command! -bang -range=% -nargs=+ SortRangesByRange
 
 command! -bang -range=% -nargs=1 -complete=expression SortByExpr
 \   call setline(<line1>, getline(<line1>)) |
-\   if ! AdvancedSorters#Expr#Sort(<line1>, <line2>, <bang>0, <q-args>) | echoerr ingo#err#Get() | endif
+\   if ! AdvancedSorters#Expr#Sort(<line1>, <line2>, <bang>0, 0, <q-args>) | echoerr ingo#err#Get() | endif
+
+command! -bang -range=% -nargs=1 -complete=expression SortByExprUnique
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Expr#Sort(<line1>, <line2>, <bang>0, 1, <q-args>) | echoerr ingo#err#Get() | endif
 
 command! -bang -range=% SortByCharLength
 \   call setline(<line1>, getline(<line1>)) |
-\   if ! AdvancedSorters#Expr#Sort(<line1>, <line2>, <bang>0, function('ingo#compat#strchars')) | echoerr ingo#err#Get() | endif
+\   if ! AdvancedSorters#Expr#Sort(<line1>, <line2>, <bang>0, 0, function('ingo#compat#strchars')) | echoerr ingo#err#Get() | endif
 
 command! -bang -range=% SortByWidth
 \   call setline(<line1>, getline(<line1>)) |
-\   if ! AdvancedSorters#Expr#Sort(<line1>, <line2>, <bang>0, function('ingo#compat#strdisplaywidth')) | echoerr ingo#err#Get() | endif
+\   if ! AdvancedSorters#Expr#Sort(<line1>, <line2>, <bang>0, 0, function('ingo#compat#strdisplaywidth')) | echoerr ingo#err#Get() | endif
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
