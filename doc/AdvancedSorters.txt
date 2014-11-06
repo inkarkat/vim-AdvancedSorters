@@ -95,6 +95,10 @@ USAGE						       *AdvancedSorters-usage*
 :[range]SortByWidth[!]
 			Sort lines in [range] by the display width.
 
+								  *:SortWORDs*
+:[range]SortWORDs[!] [i][u][r][n][x][o] [/{pattern}/]
+			Sort individual (whitespace-delimited) |WORDs| in the
+			current line / [range].
 
 EXAMPLE						     *AdvancedSorters-example*
 
@@ -145,7 +149,7 @@ IDEAS						       *AdvancedSorters-ideas*
 ==============================================================================
 HISTORY						     *AdvancedSorters-history*
 
-1.02	RELEASEME
+1.02	06-Nov-2014
 - BUG: :.SortRangesBy... doesn't work correctly on a closed fold; need to use
   ingo#range#NetStart().
   *** You need to update to ingo-library (vimscript #4433) version 1.022! ***
