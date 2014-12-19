@@ -42,6 +42,8 @@ SOURCE									     *
   http://superuser.com/questions/752032/how-do-i-sort-multiple-blocks-of-text-by-the-first-line-in-each-block-in-vim
 - :SortByExpr inspired by
   http://stackoverflow.com/questions/11531073/how-do-you-sort-a-range-of-lines-by-length
+- :SortWORDs inspired by
+  http://stackoverflow.com/questions/26739697/sort-line-horizontally-in-vim
 
 SEE ALSO								     *
 
@@ -148,6 +150,9 @@ IDEAS						       *AdvancedSorters-ideas*
 
 ==============================================================================
 HISTORY						     *AdvancedSorters-history*
+
+1.10	RELEASEME
+- Add :SortWORDs command.
 
 1.02	06-Nov-2014
 - BUG: :.SortRangesBy... doesn't work correctly on a closed fold; need to use
