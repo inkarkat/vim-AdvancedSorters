@@ -44,6 +44,7 @@ SOURCE									     *
   http://stackoverflow.com/questions/11531073/how-do-you-sort-a-range-of-lines-by-length
 - :SortWORDs inspired by
   http://stackoverflow.com/questions/26739697/sort-line-horizontally-in-vim
+  http://stackoverflow.com/questions/1327978/sorting-words-not-lines-in-vim
 
 SEE ALSO								     *
 
