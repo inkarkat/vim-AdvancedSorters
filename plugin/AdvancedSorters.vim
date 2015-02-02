@@ -12,6 +12,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.10.004	06-Nov-2014	Add :SortWORDs command.
 "   1.00.003	10-Jun-2014	Add :SortRangesByRange command.
 "				Add :SortByExprUnique variant.
 "	002	08-Jun-2014	Have :SortBy... commands check for buffer
@@ -58,6 +59,10 @@ command! -bang -range=% SortByCharLength
 command! -bang -range=% SortByWidth
 \   call setline(<line1>, getline(<line1>)) |
 \   if ! AdvancedSorters#Expr#Sort(<line1>, <line2>, <bang>0, 0, function('ingo#compat#strdisplaywidth')) | echoerr ingo#err#Get() | endif
+
+command! -bang -range -nargs=* SortWORDs
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Words#Sort('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
