@@ -7,6 +7,7 @@
 "   - ingo/compat.vim autoload script
 "   - ingo/err.vim autoload script
 "   - ingo/join.vim autoload script
+"   - ingo/range.vim autoload script
 "   - ingo/range/lines.vim autoload script
 "
 " Copyright: (C) 2014 Ingo Karkat
@@ -15,6 +16,9 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.02.005	23-Sep-2014	BUG: :.SortRangesBy... doesn't work correctly on
+"				a closed fold; need to use
+"				ingo#range#NetStart().
 "   1.01.004	11-Jun-2014	Make :SortRangesByRange work for Vim versions
 "				before 7.4.218 that don't have uniq().
 "   1.00.003	10-Jun-2014	Implement :SortRangesByRange command.
@@ -47,8 +51,9 @@ function! s:SortRanges( bang, startLnum, endLnum, sortArgs, rangeName, rangeNum,
     endtry
 endfunction
 function! AdvancedSorters#Ranges#Unfolded( bang, startLnum, endLnum, sortArgs )
-    let [l:foldNum, l:joinCnt] = ingo#join#FoldedLines(1, a:startLnum, a:endLnum, "\<C-v>\<C-j>")
-    return s:SortRanges(a:bang, a:startLnum, a:endLnum, a:sortArgs, 'folds', l:foldNum, l:joinCnt)
+    let [l:startLnum, l:endLnum] = [ingo#range#NetStart(a:startLnum), ingo#range#NetEnd(a:endLnum)]
+    let [l:foldNum, l:joinCnt] = ingo#join#FoldedLines(1, l:startLnum, l:endLnum, "\<C-v>\<C-j>")
+    return s:SortRanges(a:bang, l:startLnum, l:endLnum, a:sortArgs, 'folds', l:foldNum, l:joinCnt)
 endfunction
 
 let s:sortFlagsExpr = '[iurnxo[:space:]]'
@@ -59,13 +64,14 @@ function! s:ParseExpressionAndSortArguments( arguments )
     return ingo#cmdargs#pattern#ParseUnescaped(a:arguments, s:GetSortArgumentsExpr(4, '*'))
 endfunction
 function! s:JoinRanges( bang, startLnum, endLnum, arguments, ArgumentParser, rangeName, RangeCreator )
+    let [l:startLnum, l:endLnum] = [ingo#range#NetStart(a:startLnum), ingo#range#NetEnd(a:endLnum)]
     let [l:expr, l:sortArgs] = call(a:ArgumentParser, [a:arguments])
 
-    let l:ranges = call(a:RangeCreator, [a:startLnum, a:endLnum, l:expr])
+    let l:ranges = call(a:RangeCreator, [l:startLnum, l:endLnum, l:expr])
 
-    let [l:rangeNum, l:joinCnt] = ingo#join#Ranges(1, a:startLnum, a:endLnum, "\<C-v>\<C-j>", l:ranges)
+    let [l:rangeNum, l:joinCnt] = ingo#join#Ranges(1, l:startLnum, l:endLnum, "\<C-v>\<C-j>", l:ranges)
 
-    return s:SortRanges(a:bang, a:startLnum, a:endLnum, l:sortArgs, a:rangeName, l:rangeNum, l:joinCnt)
+    return s:SortRanges(a:bang, l:startLnum, l:endLnum, l:sortArgs, a:rangeName, l:rangeNum, l:joinCnt)
 endfunction
 
 
