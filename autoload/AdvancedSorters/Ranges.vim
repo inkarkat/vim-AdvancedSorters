@@ -10,12 +10,16 @@
 "   - ingo/range.vim autoload script
 "   - ingo/range/lines.vim autoload script
 "
-" Copyright: (C) 2014 Ingo Karkat
+" Copyright: (C) 2014-2015 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.30.006	03-Feb-2015	Refactoring: Change optional argument of
+"				s:GetSortArgumentsExpr() from appended
+"				expression to sortFlagsExpr and expose for
+"				reuse.
 "   1.02.005	23-Sep-2014	BUG: :.SortRangesBy... doesn't work correctly on
 "				a closed fold; need to use
 "				ingo#range#NetStart().
@@ -28,6 +32,8 @@
 "	002	09-Jun-2014	Account for the reduced end line number when the
 "				"u" flag is passed and there are duplicate lines.
 "	001	08-Jun-2014	file creation from ingocommands.vim
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! s:SortRanges( bang, startLnum, endLnum, sortArgs, rangeName, rangeNum, joinCnt )
     if empty(a:rangeNum)
@@ -57,11 +63,14 @@ function! AdvancedSorters#Ranges#Unfolded( bang, startLnum, endLnum, sortArgs )
 endfunction
 
 let s:sortFlagsExpr = '[iurnxo[:space:]]'
-function! s:GetSortArgumentsExpr( captureNum, flagsCardinality, ... )
-    return '\s*\(' . s:sortFlagsExpr . a:flagsCardinality . '\%(\([[:alnum:]\\"|]\@![\x00-\xFF]\)\(.\{-}\)\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\' . a:captureNum . '\)\?\)' . (a:0 ? a:1 : '')
+function! AdvancedSorters#Ranges#GetSortArgumentsExpr( captureNum, flagsCardinality, ... )
+    return '\s*\(' .
+    \   (a:0 ? a:1 : s:sortFlagsExpr) . a:flagsCardinality .
+    \   '\%(\([[:alnum:]\\"|]\@![\x00-\xFF]\)\(.\{-}\)\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\' . a:captureNum . '\)\?' .
+    \'\)'
 endfunction
 function! s:ParseExpressionAndSortArguments( arguments )
-    return ingo#cmdargs#pattern#ParseUnescaped(a:arguments, s:GetSortArgumentsExpr(4, '*'))
+    return ingo#cmdargs#pattern#ParseUnescaped(a:arguments, AdvancedSorters#Ranges#GetSortArgumentsExpr(4, '*'))
 endfunction
 function! s:JoinRanges( bang, startLnum, endLnum, arguments, ArgumentParser, rangeName, RangeCreator )
     let [l:startLnum, l:endLnum] = [ingo#range#NetStart(a:startLnum), ingo#range#NetEnd(a:endLnum)]
@@ -135,7 +144,7 @@ function! s:ParseRangeAndSortArguments( arguments )
     " Since both the range and the sort arguments can contain a /{pattern}/,
     " parsing is difficult. It's easier when there's a sort flag or whitespace
     " in between, so look for such first.
-    let l:parsedRange = ingo#cmdargs#range#Parse(a:arguments, {'isParseFirstRange': 1, 'commandExpr': s:GetSortArgumentsExpr(5, '\+', '$')})
+    let l:parsedRange = ingo#cmdargs#range#Parse(a:arguments, {'isParseFirstRange': 1, 'commandExpr': AdvancedSorters#Ranges#GetSortArgumentsExpr(5, '\+') . '$'})
     if empty(l:parsedRange)
 	" Else, take the entire arguments as a range, with only optional sort
 	" flags allowed (but no sort pattern). This means that here, there
@@ -175,4 +184,6 @@ function! AdvancedSorters#Ranges#ByRange( bang, startLnum, endLnum, arguments )
     return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseRangeAndSortArguments'), 'ranges', function('s:ByRange'))
 endfunction
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
