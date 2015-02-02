@@ -152,7 +152,7 @@ IDEAS						       *AdvancedSorters-ideas*
 ==============================================================================
 HISTORY						     *AdvancedSorters-history*
 
-1.10	RELEASEME
+1.10	23-Dec-2014
 - Add :SortWORDs command.
 
 1.02	06-Nov-2014
