@@ -103,6 +103,18 @@ USAGE						       *AdvancedSorters-usage*
 			Sort individual (whitespace-delimited) |WORDs| in the
 			current line / [range].
 
+								       *:Uniq*
+:[range]Uniq[!] [i][r] [/{pattern}/]
+			Remove lines in [range] that have already been
+			encountered earlier (not necessarily adjacent).
+			With [i] case is ignored.
+			When /{pattern}/ is specified and there is no [r] flag
+			the text matched with {pattern} is ignored.
+			With [r] only the matching {pattern} is considered;
+			the rest is ignored.
+			If a {pattern} is used, any lines which don't have a
+			match for {pattern} are kept.
+
 EXAMPLE						     *AdvancedSorters-example*
 
 We're taking any Vimscript file with multiple function definitions as an
@@ -152,6 +164,11 @@ IDEAS						       *AdvancedSorters-ideas*
 ==============================================================================
 HISTORY						     *AdvancedSorters-history*
 
+1.20	RELEASEME
+- Add :Uniq command.
+- Also support [/{pattern}/] [i][u][r][n][x][o] :sort argument order (and
+  mixed).
+
 1.10	23-Dec-2014
 - Add :SortWORDs command.
 
@@ -172,7 +189,7 @@ First published version.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2012-2014 Ingo Karkat
+Copyright: (C) 2012-2015 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
