@@ -1,4 +1,4 @@
-" Test sorting functions.
+" Test sorting by start of functions.
 
 edit functions.txt
 SortRangesByHeader /^function/
