@@ -1,0 +1,35 @@
+
+
+    " Duplicate first line only
+    " Internal
+    " Internal
+    " Internal
+    " Public function
+    " Stuff elided.
+    " Stuff elided.
+    " Stuff elided.
+    " Stuff elided.
+" Boilerplate
+" Code that is
+" vim: set ts=8 sts=4 sw=4 noexpandtab :
+endfunction
+endfunction
+endfunction
+endfunction
+endfunction
+function! Sorters#Ranges#ByHeader( bang, startLnum, endLnum, arguments )
+function! s:ByHeader( startLnum, endLnum, expr )
+function! s:ByHeader( startLnum, endLnum, expr )
+function! s:ByHeader( startLnum, endLnum, expr )
+    " Internal
+    " Stuff elided.
+endfunction
+function! s:SortRanges( bang, startLnum, endLnum, sortArgs, rangeName, rangeNum, joinCnt )
+    " Internal
+    " Stuff elided.
+endfunction
+function! Sorters#Ranges#Unfolded( bang, startLnum, endLnum, sortArgs )
+    " Public unrelated function
+endfunction
+function! s:JoinRanges( bang, startLnum, endLnum, arguments, RangeCreator )
+function! s:ParseExpressionAndSortArguments( arguments )
