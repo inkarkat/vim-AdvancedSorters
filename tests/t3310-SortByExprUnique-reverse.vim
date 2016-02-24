@@ -1,0 +1,16 @@
+" Test reverse unique sorting by a fixed order expression.
+
+set encoding=utf-8
+edit ++enc=utf-8 lengths.txt
+
+call vimtest#StartTap()
+call vimtap#Plan(2)
+let g:ordering = [6, 6, 6, 4, 9, 5, 10, 13, 11, 14, 12, 2, 2, 2, 15, 15, 18, 19, 17, 99]
+call vimtap#Is(line('$') + 1, len(g:ordering), 'expression is initialized with one value for each line, and sentinel')
+
+SortByExprUnique! remove(g:ordering, 0)
+
+call vimtap#Is(g:ordering, [99], 'expression has been evaluated once for each line')
+
+call vimtest#SaveOut()
+call vimtest#Quit()
