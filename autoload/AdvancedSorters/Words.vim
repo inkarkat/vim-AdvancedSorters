@@ -17,6 +17,8 @@ function! AdvancedSorters#Words#Sort( bang, startLnum, endLnum, arguments )
 
     " Remove completely empty lines.
     execute printf('silent %d,%dglobal/^$/delete _', a:startLnum, l:endLnum)
+    call histdel('search', -1)
+
     let l:deletedLineNum = l:lineNum - line('$')
     let l:endLnum -= l:deletedLineNum
     if l:endLnum < a:startLnum
@@ -39,4 +41,5 @@ function! AdvancedSorters#Words#Sort( bang, startLnum, endLnum, arguments )
 	return 0
     endtry
 endfunction
+
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
