@@ -1,0 +1,8 @@
+y x z w v u
+b a d f c e
+
+
+" Code that is
+" Boilerplate
+
+s:ByHeader() s:ByHeader() s:ByHeader() Sorters#Ranges#ByHeader() s:InnerOne() s:JoinRanges() s:ParseExpressionAndSortArguments() s:SortRanges() Sorters#Ranges#Unfolded()
