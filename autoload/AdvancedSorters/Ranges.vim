@@ -16,10 +16,10 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
-"   1.30.006	03-Feb-2015	Refactoring: Change optional argument of
-"				s:GetSortArgumentsExpr() from appended
-"				expression to sortFlagsExpr and expose for
-"				reuse.
+"   1.30.006	03-Feb-2015	Refactoring: Remove optional argument of
+"				s:GetSortArgumentsExpr().
+"				Also support [/{pattern}/] [i][u][r][n][x][o]
+"				:sort argument order (and mixed).
 "   1.02.005	23-Sep-2014	BUG: :.SortRangesBy... doesn't work correctly on
 "				a closed fold; need to use
 "				ingo#range#NetStart().
@@ -63,14 +63,15 @@ function! AdvancedSorters#Ranges#Unfolded( bang, startLnum, endLnum, sortArgs )
 endfunction
 
 let s:sortFlagsExpr = '[iurnxo[:space:]]'
-function! AdvancedSorters#Ranges#GetSortArgumentsExpr( captureNum, flagsCardinality, ... )
+function! s:GetSortArgumentsExpr( captureNum, flagsBeforePatternCardinality, ... )
     return '\s*\(' .
-    \   (a:0 ? a:1 : s:sortFlagsExpr) . a:flagsCardinality .
+    \   s:sortFlagsExpr . a:flagsBeforePatternCardinality .
     \   '\%(\([[:alnum:]\\"|]\@![\x00-\xFF]\)\(.\{-}\)\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\' . a:captureNum . '\)\?' .
+    \   s:sortFlagsExpr . '*' .
     \'\)'
 endfunction
 function! s:ParseExpressionAndSortArguments( arguments )
-    return ingo#cmdargs#pattern#ParseUnescaped(a:arguments, AdvancedSorters#Ranges#GetSortArgumentsExpr(4, '*'))
+    return ingo#cmdargs#pattern#ParseUnescaped(a:arguments, s:GetSortArgumentsExpr(4, '*'))
 endfunction
 function! s:JoinRanges( bang, startLnum, endLnum, arguments, ArgumentParser, rangeName, RangeCreator )
     let [l:startLnum, l:endLnum] = [ingo#range#NetStart(a:startLnum), ingo#range#NetEnd(a:endLnum)]
@@ -144,7 +145,7 @@ function! s:ParseRangeAndSortArguments( arguments )
     " Since both the range and the sort arguments can contain a /{pattern}/,
     " parsing is difficult. It's easier when there's a sort flag or whitespace
     " in between, so look for such first.
-    let l:parsedRange = ingo#cmdargs#range#Parse(a:arguments, {'isParseFirstRange': 1, 'commandExpr': AdvancedSorters#Ranges#GetSortArgumentsExpr(5, '\+') . '$'})
+    let l:parsedRange = ingo#cmdargs#range#Parse(a:arguments, {'isParseFirstRange': 1, 'commandExpr': s:GetSortArgumentsExpr(5, '\+') . '$'})
     if empty(l:parsedRange)
 	" Else, take the entire arguments as a range, with only optional sort
 	" flags allowed (but no sort pattern). This means that here, there
