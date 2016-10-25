@@ -1,0 +1,5 @@
+" AName: {{{1
+let g:string = "Hello  World"
+" BName: {{{1
+" note
+let g:setting = 1
