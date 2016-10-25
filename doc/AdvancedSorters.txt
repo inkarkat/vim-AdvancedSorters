@@ -164,10 +164,12 @@ IDEAS						       *AdvancedSorters-ideas*
 ==============================================================================
 HISTORY						     *AdvancedSorters-history*
 
-1.20	RELEASEME
+1.20	09-Feb-2015
 - Add :Uniq command.
 - Also support [/{pattern}/] [i][u][r][n][x][o] :sort argument order (and
   mixed).
+- FIX: Include missing Words.vim module that prevented the :SortWORDs command
+  introduced in the previous version 1.10 from functioning.
 
 1.10	23-Dec-2014
 - Add :SortWORDs command.
