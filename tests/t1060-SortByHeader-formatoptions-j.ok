@@ -1,0 +1,6 @@
+function AName:
+let g:string = "Hello  World"
+function BName:
+# simple
+# note
+let g:setting = 1
