@@ -10,13 +10,18 @@
 "   - ingo/range.vim autoload script
 "   - ingo/range/lines.vim autoload script
 "
-" Copyright: (C) 2014-2015 Ingo Karkat
+" Copyright: (C) 2014-2016 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
-"   1.30.006	03-Feb-2015	Refactoring: Remove optional argument of
+"   1.21.007	26-Oct-2016	BUG: :SortUnfolded and :SortRangedBy... remove
+"				comment sigils (like "#") when 'formatoptions'
+"				contains "j". Temporarily reset 'formatoptions'
+"				to avoid interference of user settings. Thanks
+"				to Holger Mitschke for reporting this!
+"   1.20.006	03-Feb-2015	Refactoring: Remove optional argument of
 "				s:GetSortArgumentsExpr().
 "				Also support [/{pattern}/] [i][u][r][n][x][o]
 "				:sort argument order (and mixed).
@@ -58,7 +63,15 @@ function! s:SortRanges( bang, startLnum, endLnum, sortArgs, rangeName, rangeNum,
 endfunction
 function! AdvancedSorters#Ranges#Unfolded( bang, startLnum, endLnum, sortArgs )
     let [l:startLnum, l:endLnum] = [ingo#range#NetStart(a:startLnum), ingo#range#NetEnd(a:endLnum)]
-    let [l:foldNum, l:joinCnt] = ingo#join#FoldedLines(1, l:startLnum, l:endLnum, "\<C-v>\<C-j>")
+
+    let l:save_formatoptions = &l:formatoptions
+    setlocal formatoptions=
+    try
+	let [l:foldNum, l:joinCnt] = ingo#join#FoldedLines(1, l:startLnum, l:endLnum, "\<C-v>\<C-j>")
+    finally
+	let &l:formatoptions = l:save_formatoptions
+    endtry
+
     return s:SortRanges(a:bang, l:startLnum, l:endLnum, a:sortArgs, 'folds', l:foldNum, l:joinCnt)
 endfunction
 
@@ -79,7 +92,13 @@ function! s:JoinRanges( bang, startLnum, endLnum, arguments, ArgumentParser, ran
 
     let l:ranges = call(a:RangeCreator, [l:startLnum, l:endLnum, l:expr])
 
-    let [l:rangeNum, l:joinCnt] = ingo#join#Ranges(1, l:startLnum, l:endLnum, "\<C-v>\<C-j>", l:ranges)
+    let l:save_formatoptions = &l:formatoptions
+    setlocal formatoptions=
+    try
+	let [l:rangeNum, l:joinCnt] = ingo#join#Ranges(1, l:startLnum, l:endLnum, "\<C-v>\<C-j>", l:ranges)
+    finally
+	let &l:formatoptions = l:save_formatoptions
+    endtry
 
     return s:SortRanges(a:bang, l:startLnum, l:endLnum, l:sortArgs, a:rangeName, l:rangeNum, l:joinCnt)
 endfunction
