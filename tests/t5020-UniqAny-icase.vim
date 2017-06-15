@@ -1,7 +1,7 @@
 " Test keeping unique lines ignoring case.
 
 edit uniq.txt
-Uniq i
+UniqAny i
 
 call vimtest#SaveOut()
 call vimtest#Quit()
