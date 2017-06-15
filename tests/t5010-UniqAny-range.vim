@@ -1,7 +1,7 @@
 " Test keeping unique lines within a range.
 
 edit uniq.txt
-2,10Uniq
+2,10UniqAny
 
 call vimtest#StartTap()
 call vimtap#Plan(2)
