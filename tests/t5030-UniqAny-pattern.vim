@@ -1,7 +1,7 @@
 " Test keeping unique lines ignoring pattern.
 
 edit uniq.txt
-Uniq /type: .*: /
+UniqAny /type: .*: /
 
 call vimtest#SaveOut()
 call vimtest#Quit()
