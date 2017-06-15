@@ -6,8 +6,9 @@ type: Business Rules id: 47211ba9-6e16-48d5-b42e-7e4812c02553
 type: Business Rules id: 6cf81bd4-3179-4971-979a-26e91a16e387
 type: Context Menus id: a14a41b3-1012-45af-8a1f-dbfe25b19b61
 type: Business Rules id: 02c38d1f-015d-4f7b-b9ce-9f625268bcb6
-type: BUSINESS RULES id: 47211ba9-6e16-48d5-b42e-7e4812c02553
+type: BUSINESS RULES id: 47211BA9-6E16-48D5-B42E-7E4812C02553
 type: Business Rules id: 12288DD2-AF01-4D7C-B1FF-837BFBDF409B
+type: Context Menus id: a14a41b3-1012-45af-8a1f-dbfe25b19b61
 type: Context Menus id: a14a41b3-1012-45af-8a1f-dbfe25b19b61
 type: Business Rules id: cffd00a3-d74c-48ee-b971-af36e4b98b3c
 type: Context Menus id: cffd00a3-d74c-48ee-b971-af36e4b98b3c
