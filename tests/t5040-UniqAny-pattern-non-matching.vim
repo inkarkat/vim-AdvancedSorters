@@ -3,7 +3,7 @@
 " position.
 
 edit uniq.txt
-Uniq /type: Business Rules id: /
+UniqAny /type: Business Rules id: /
 
 call vimtest#SaveOut()
 call vimtest#Quit()
