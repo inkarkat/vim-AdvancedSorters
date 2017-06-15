@@ -6,12 +6,13 @@
 "   - ingo/compat.vim autoload script
 "   - ingo/err.vim autoload script
 "
-" Copyright: (C) 2014 Ingo Karkat
+" Copyright: (C) 2014-2015 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.20.005	03-Feb-2015	Add :Uniq command.
 "   1.10.004	06-Nov-2014	Add :SortWORDs command.
 "   1.00.003	10-Jun-2014	Add :SortRangesByRange command.
 "				Add :SortByExprUnique variant.
@@ -63,6 +64,10 @@ command! -bang -range=% SortByWidth
 command! -bang -range -nargs=* SortWORDs
 \   call setline(<line1>, getline(<line1>)) |
 \   if ! AdvancedSorters#Words#Sort('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+
+command! -range=% -nargs=* Uniq
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Uniq#Uniq(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
