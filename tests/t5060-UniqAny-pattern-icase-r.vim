@@ -2,7 +2,7 @@
 " Tests that flags can be specified both before and after the pattern.
 
 edit uniq.txt
-Uniq i/[[:xdigit:]-]\{10,}/r
+UniqAny i/[[:xdigit:]-]\{10,}/r
 
 call vimtest#SaveOut()
 call vimtest#Quit()
