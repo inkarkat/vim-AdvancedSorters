@@ -9,6 +9,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.30.008	04-Jun-2019	Expose s:GetSortArgumentsExpr().
 "   1.21.007	26-Oct-2016	BUG: :SortUnfolded and :SortRangedBy... remove
 "				comment sigils (like "#") when 'formatoptions'
 "				contains "j". Temporarily reset 'formatoptions'
@@ -69,15 +70,15 @@ function! AdvancedSorters#Ranges#Unfolded( bang, startLnum, endLnum, sortArgs )
 endfunction
 
 let s:sortFlagsExpr = '[iurnxo[:space:]]'
-function! s:GetSortArgumentsExpr( captureNum, flagsBeforePatternCardinality, ... )
+function! AdvancedSorters#Ranges#GetSortArgumentsExpr( captureNum, flagsBeforePatternCardinality, ... )
     return '\s*\(' .
     \   s:sortFlagsExpr . a:flagsBeforePatternCardinality .
     \   '\%(\([[:alnum:]\\"|]\@![\x00-\xFF]\)\(.\{-}\)\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\' . a:captureNum . '\)\?' .
     \   s:sortFlagsExpr . '*' .
     \'\)'
 endfunction
-function! AdvancedSorters#Ranges#ParseExpressionAndSortArguments( arguments )
-    return ingo#cmdargs#pattern#ParseUnescaped(a:arguments, s:GetSortArgumentsExpr(4, '*'))
+function! s:ParseExpressionAndSortArguments( arguments )
+    return ingo#cmdargs#pattern#ParseUnescaped(a:arguments, AdvancedSorters#Ranges#GetSortArgumentsExpr(4, '*'))
 endfunction
 function! s:JoinRanges( bang, startLnum, endLnum, arguments, ArgumentParser, rangeName, RangeCreator )
     let [l:startLnum, l:endLnum] = [ingo#range#NetStart(a:startLnum), ingo#range#NetEnd(a:endLnum)]
@@ -123,7 +124,7 @@ function! s:ByHeader( startLnum, endLnum, expr )
     return l:ranges
 endfunction
 function! AdvancedSorters#Ranges#ByHeader( bang, startLnum, endLnum, arguments )
-    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('AdvancedSorters#Ranges#ParseExpressionAndSortArguments'), 'headers', function('s:ByHeader'))
+    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseExpressionAndSortArguments'), 'headers', function('s:ByHeader'))
 endfunction
 
 function! s:ByMatch( startLnum, endLnum, expr )
@@ -150,14 +151,14 @@ function! s:ByMatch( startLnum, endLnum, expr )
     return l:ranges
 endfunction
 function! AdvancedSorters#Ranges#ByMatch( bang, startLnum, endLnum, arguments )
-    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('AdvancedSorters#Ranges#ParseExpressionAndSortArguments'), 'matches', function('s:ByMatch'))
+    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseExpressionAndSortArguments'), 'matches', function('s:ByMatch'))
 endfunction
 
 function! s:ParseRangeAndSortArguments( arguments )
     " Since both the range and the sort arguments can contain a /{pattern}/,
     " parsing is difficult. It's easier when there's a sort flag or whitespace
     " in between, so look for such first.
-    let l:parsedRange = ingo#cmdargs#range#Parse(a:arguments, {'isParseFirstRange': 1, 'commandExpr': s:GetSortArgumentsExpr(5, '\+') . '$'})
+    let l:parsedRange = ingo#cmdargs#range#Parse(a:arguments, {'isParseFirstRange': 1, 'commandExpr': AdvancedSorters#Ranges#GetSortArgumentsExpr(5, '\+') . '$'})
     if empty(l:parsedRange)
 	" Else, take the entire arguments as a range, with only optional sort
 	" flags allowed (but no sort pattern). This means that here, there
