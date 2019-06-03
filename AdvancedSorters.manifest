@@ -1,5 +1,6 @@
 autoload/AdvancedSorters/Expr.vim
 autoload/AdvancedSorters/Ranges.vim
 autoload/AdvancedSorters/Uniq.vim
+autoload/AdvancedSorters/Words.vim
 plugin/AdvancedSorters.vim
 doc/AdvancedSorters.txt
