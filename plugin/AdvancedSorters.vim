@@ -1,17 +1,15 @@
 " AdvancedSorters.vim: Sorting of certain areas or by special needs.
 "
 " DEPENDENCIES:
-"   - AdvancedSorters/Expr.vim autoload script
-"   - AdvancedSorters/Ranges.vim autoload script
-"   - ingo/compat.vim autoload script
-"   - ingo/err.vim autoload script
+"   - ingo-library.vim plugin
 "
-" Copyright: (C) 2014-2017 Ingo Karkat
+" Copyright: (C) 2014-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.30.007	04-Jun-2019	Add :SortEach generalization of :SortWORDs.
 "   1.30.006	16-Jun-2017	CHG: Rename :Uniq to :UniqAny and add
 "				:UniqSubsequent variant.
 "   1.20.005	03-Feb-2015	Add :Uniq command.
@@ -63,9 +61,13 @@ command! -bang -range=% SortByWidth
 \   call setline(<line1>, getline(<line1>)) |
 \   if ! AdvancedSorters#Expr#Sort(<line1>, <line2>, <bang>0, 0, function('ingo#compat#strdisplaywidth')) | echoerr ingo#err#Get() | endif
 
+command! -bang -range -nargs=* SortEach
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Each#Command('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+
 command! -bang -range -nargs=* SortWORDs
 \   call setline(<line1>, getline(<line1>)) |
-\   if ! AdvancedSorters#Words#Sort('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+\   if ! AdvancedSorters#Each#WORD('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
 
 command! -range=% -nargs=* UniqAny
 \   call setline(<line1>, getline(<line1>)) |
