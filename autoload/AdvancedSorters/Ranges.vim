@@ -1,16 +1,9 @@
 " AdvancedSorters/Ranges.vim: Sorting of whole ranges as one unit.
 "
 " DEPENDENCIES:
-"   - ingo/cmdargs/pattern.vim autoload script
-"   - ingo/cmdargs/range.vim autoload script
-"   - ingo/collections.vim autoload script
-"   - ingo/compat.vim autoload script
-"   - ingo/err.vim autoload script
-"   - ingo/join.vim autoload script
-"   - ingo/range.vim autoload script
-"   - ingo/range/lines.vim autoload script
+"   - ingo-library.vim plugin
 "
-" Copyright: (C) 2014-2017 Ingo Karkat
+" Copyright: (C) 2014-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -83,7 +76,7 @@ function! s:GetSortArgumentsExpr( captureNum, flagsBeforePatternCardinality, ...
     \   s:sortFlagsExpr . '*' .
     \'\)'
 endfunction
-function! s:ParseExpressionAndSortArguments( arguments )
+function! AdvancedSorters#Ranges#ParseExpressionAndSortArguments( arguments )
     return ingo#cmdargs#pattern#ParseUnescaped(a:arguments, s:GetSortArgumentsExpr(4, '*'))
 endfunction
 function! s:JoinRanges( bang, startLnum, endLnum, arguments, ArgumentParser, rangeName, RangeCreator )
@@ -130,7 +123,7 @@ function! s:ByHeader( startLnum, endLnum, expr )
     return l:ranges
 endfunction
 function! AdvancedSorters#Ranges#ByHeader( bang, startLnum, endLnum, arguments )
-    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseExpressionAndSortArguments'), 'headers', function('s:ByHeader'))
+    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('AdvancedSorters#Ranges#ParseExpressionAndSortArguments'), 'headers', function('s:ByHeader'))
 endfunction
 
 function! s:ByMatch( startLnum, endLnum, expr )
@@ -157,7 +150,7 @@ function! s:ByMatch( startLnum, endLnum, expr )
     return l:ranges
 endfunction
 function! AdvancedSorters#Ranges#ByMatch( bang, startLnum, endLnum, arguments )
-    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseExpressionAndSortArguments'), 'matches', function('s:ByMatch'))
+    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('AdvancedSorters#Ranges#ParseExpressionAndSortArguments'), 'matches', function('s:ByMatch'))
 endfunction
 
 function! s:ParseRangeAndSortArguments( arguments )
