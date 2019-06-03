@@ -2,7 +2,7 @@
 "
 " DEPENDENCIES:
 "
-" Copyright: (C) 2014 Ingo Karkat
+" Copyright: (C) 2014-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -11,7 +11,7 @@
 "   1.10.001	06-Nov-2014	file creation
 
 function! AdvancedSorters#Words#Sort( bang, startLnum, endLnum, arguments )
-    " Join lines, delete indent and trailing whitespace.
+    " Unjoin lines, delete indent and trailing whitespace.
     execute printf('silent %d,%dsubstitute/\s\+\|\s\+\n\s*\|\s*\n\s\+/\r/g', a:startLnum, a:endLnum)
     let [l:endLnum, l:lineNum] = [line("']"), line('$')]
 
@@ -29,11 +29,11 @@ function! AdvancedSorters#Words#Sort( bang, startLnum, endLnum, arguments )
 
     try
 	let l:lineNum = line('$')
-	execute printf("silent %d,%dsort%s %s", a:startLnum, l:endLnum, a:bang, a:arguments)
+	execute printf('silent %d,%dsort%s %s', a:startLnum, l:endLnum, a:bang, a:arguments)
 	let l:duplicatedNum = l:lineNum - line('$')
 	let l:endLnum -= l:duplicatedNum
 
-	execute printf("silent %d,%djoin", a:startLnum, l:endLnum)
+	execute printf('silent %d,%djoin', a:startLnum, l:endLnum)
 	return 1
     catch /^Vim\%((\a\+)\)\=:/
 	silent! undo
