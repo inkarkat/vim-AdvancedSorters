@@ -10,7 +10,7 @@
 "   - ingo/range.vim autoload script
 "   - ingo/range/lines.vim autoload script
 "
-" Copyright: (C) 2014-2016 Ingo Karkat
+" Copyright: (C) 2014-2017 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -41,7 +41,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! s:SortRanges( bang, startLnum, endLnum, sortArgs, rangeName, rangeNum, joinCnt )
-    if empty(a:rangeNum)
+    if a:rangeNum <= 0
 	call ingo#err#Set(printf('No %s found', a:rangeName))
 	return 0
     endif
