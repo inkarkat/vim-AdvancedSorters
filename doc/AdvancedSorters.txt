@@ -98,6 +98,13 @@ USAGE						       *AdvancedSorters-usage*
 :[range]SortByWidth[!]
 			Sort lines in [range] by the display width.
 
+								   *:SortEach*
+:[range]SortEach /{delimiter-pattern}/[{joiner}/]
+:[range]SortEach /{delimiter-pattern}/[{joiner}]/ [i][u][r][n][x][o] /{pattern}/
+			Sort individual elements delimited by
+			{delimiter-pattern} (or newlines) in the current line
+			/ [range], and join them back together with the first
+			matching delimiter [or {joiner}].
 								  *:SortWORDs*
 :[range]SortWORDs[!] [i][u][r][n][x][o] [/{pattern}/]
 			Sort individual (whitespace-delimited) |WORDs| in the
@@ -177,6 +184,7 @@ HISTORY						     *AdvancedSorters-history*
 
 1.30	RELEASEME
 - CHG: Rename :Uniq to :UniqAny and add :UniqSubsequent variant.
+- Add :SortEach generalization of :SortWORDs.
 
 1.21	26-Oct-2016
 - BUG: :SortUnfolded and :SortRangedBy... remove comment sigils (like "#")
@@ -211,7 +219,7 @@ First published version.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2012-2017 Ingo Karkat
+Copyright: (C) 2012-2019 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
