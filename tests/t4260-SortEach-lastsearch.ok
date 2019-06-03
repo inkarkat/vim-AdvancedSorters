@@ -1,0 +1,13 @@
+bar_baz-foo-mix_lulli-nono_mono-quux
+quark-max__nox-foobar
+
+call IsPlacedMarks({
+'a': 13 # 'b': 14 # 'c': 14 # 'd': 90 # 'e': 91 # 'f': 93 # 'g': 14 # 'j': 98 # 'k': 20 # 'x': 30 # 'y': 32 # 'z': 31
+}, 'reorder all lowercase marks')
+
+'b': 13, 'c': 14,: 14, 'a'
+'z': 31, 'd': 90, 'C': 14,
+'f': 93, 'x': 30, 'y': 32,
+'k': 20, 'e': 91, 'j': 98
+
+    s:ByHeader(),     s:Inner(),     s:OuterOne(), Sorters#Ranges#ByHeader(), Sorters#Ranges#Unfolded(), Sorters#Ranges#Unfolded(), s:ByHeader(), s:ByHeader(), s:JoinRanges(), s:ParseExpressionAndSortArguments(), s:ParseExpressionAndSortArguments(), s:SortRanges(), s:SortRanges()
