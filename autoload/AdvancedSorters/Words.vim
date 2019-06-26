@@ -6,9 +6,6 @@
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"   1.10.001	06-Nov-2014	file creation
 
 function! AdvancedSorters#Words#Sort( bang, startLnum, endLnum, arguments )
     " Unjoin lines, delete indent and trailing whitespace.

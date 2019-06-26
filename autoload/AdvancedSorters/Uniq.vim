@@ -8,20 +8,10 @@
 "   - ingo/lines.vim autoload script
 "   - ingo/range.vim autoload script
 "
-" Copyright: (C) 2015-2017 Ingo Karkat
+" Copyright: (C) 2015-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"   1.30.002	16-Jun-2017	Factor out s:Uniq(), passing in the
-"				a:UniqFuncref. Add
-"				AdvancedSorters#Uniq#UniqAny() for the renamed
-"				:UniqAny command. Add
-"				AdvancedSorters#Uniq#UniqSubsequent() and new
-"				s:MakeUniqueSubsequent() implementation for new
-"				:UniqSubsequent.
-"   1.20.001	03-Feb-2015	file creation
 
 function! s:Parse( arguments )
     let l:uniqFlagsExpr = '[ir[:space:]]'

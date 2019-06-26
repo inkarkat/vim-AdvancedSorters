@@ -7,30 +7,6 @@
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"   1.30.008	04-Jun-2019	Expose s:GetSortArgumentsExpr().
-"   1.21.007	26-Oct-2016	BUG: :SortUnfolded and :SortRangedBy... remove
-"				comment sigils (like "#") when 'formatoptions'
-"				contains "j". Temporarily reset 'formatoptions'
-"				to avoid interference of user settings. Thanks
-"				to Holger Mitschke for reporting this!
-"   1.20.006	03-Feb-2015	Refactoring: Remove optional argument of
-"				s:GetSortArgumentsExpr().
-"				Also support [/{pattern}/] [i][u][r][n][x][o]
-"				:sort argument order (and mixed).
-"   1.02.005	23-Sep-2014	BUG: :.SortRangesBy... doesn't work correctly on
-"				a closed fold; need to use
-"				ingo#range#NetStart().
-"   1.01.004	11-Jun-2014	Make :SortRangesByRange work for Vim versions
-"				before 7.4.218 that don't have uniq().
-"   1.00.003	10-Jun-2014	Implement :SortRangesByRange command.
-"				Pass a:ArgumentParser to s:JoinRanges() to
-"				accommodate the different parsing for
-"				:SortRangesByRange.
-"	002	09-Jun-2014	Account for the reduced end line number when the
-"				"u" flag is passed and there are duplicate lines.
-"	001	08-Jun-2014	file creation from ingocommands.vim
 let s:save_cpo = &cpo
 set cpo&vim
 

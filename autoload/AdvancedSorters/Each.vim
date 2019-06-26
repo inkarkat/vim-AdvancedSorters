@@ -7,12 +7,6 @@
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"   1.30.002	04-Jun-2019	Factor out generic s:SortEach().
-"				Implement :SortEach via
-"				AdvancedSorters#Each#Command().
-"   1.10.001	06-Nov-2014	file creation
 let s:save_cpo = &cpo
 set cpo&vim
 

@@ -7,18 +7,6 @@
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"   1.30.007	04-Jun-2019	Add :SortEach generalization of :SortWORDs.
-"   1.30.006	16-Jun-2017	CHG: Rename :Uniq to :UniqAny and add
-"				:UniqSubsequent variant.
-"   1.20.005	03-Feb-2015	Add :Uniq command.
-"   1.10.004	06-Nov-2014	Add :SortWORDs command.
-"   1.00.003	10-Jun-2014	Add :SortRangesByRange command.
-"				Add :SortByExprUnique variant.
-"	002	08-Jun-2014	Have :SortBy... commands check for buffer
-"				modifiablity and handle errors, too.
-"	001	08-Jun-2014	file creation
 
 " Avoid installing twice or when in unsupported Vim version.
 if exists('g:loaded_AdvancedSorters') || (v:version < 700)
