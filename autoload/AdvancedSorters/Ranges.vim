@@ -55,7 +55,7 @@ function! s:SortRanges( bang, startLnum, endLnum, sortArgs, rangeName, rangeNum,
 	call histdel('search', -1)
     endtry
 endfunction
-function! AdvancedSorters#Ranges#Unfolded( bang, startLnum, endLnum, sortArgs )
+function! AdvancedSorters#Ranges#Visible( bang, startLnum, endLnum, sortArgs )
     let [l:startLnum, l:endLnum] = [ingo#range#NetStart(a:startLnum), ingo#range#NetEnd(a:endLnum)]
 
     let l:save_formatoptions = &l:formatoptions

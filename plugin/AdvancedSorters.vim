@@ -28,9 +28,9 @@ let g:loaded_AdvancedSorters = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-command! -bang -range=% -nargs=* SortUnfolded
+command! -bang -range=% -nargs=* SortVisible
 \   call setline(<line1>, getline(<line1>)) |
-\   if ! AdvancedSorters#Ranges#Unfolded('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+\   if ! AdvancedSorters#Ranges#Visible('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
 
 command! -bang -range=% -nargs=+ SortRangesByHeader
 \   call setline(<line1>, getline(<line1>)) |

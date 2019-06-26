@@ -27,7 +27,7 @@ characters and by the line's display width.
 
 ### SOURCE
 
-- [:SortUnfolded inspiration](http://stackoverflow.com/questions/13554191/sorting-vim-folds)
+- [:SortVisible inspiration](http://stackoverflow.com/questions/13554191/sorting-vim-folds)
 - [:SortRangesByRange inspiration](http://superuser.com/questions/752032/how-do-i-sort-multiple-blocks-of-text-by-the-first-line-in-each-block-in-vim)
 - [:SortByExpr inspiration](http://stackoverflow.com/questions/11531073/how-do-you-sort-a-range-of-lines-by-length)
 - [:SortWORDs inspiration](http://stackoverflow.com/questions/26739697/sort-line-horizontally-in-vim)
@@ -42,7 +42,7 @@ characters and by the line's display width.
 USAGE
 ------------------------------------------------------------------------------
 
-    :[range]SortUnfolded[!] [i][u][r][n][x][o] [/{pattern}/]
+    :[range]SortVisible[!] [i][u][r][n][x][o] [/{pattern}/]
                             Sort visible lines in the buffer / [range]. Lines
                             inside closed folds are kept intact; sorting is done
                             on all lines of the fold as one unit; i.e. the order
@@ -126,7 +126,7 @@ arguments).
 To use folding, we first have to define the folds, then trigger the sorting:
 
     :g/^function/,/^endfunction/fold
-    :SortUnfolded
+    :SortVisible
 
 If we don't care about including any lines after the "endfunction", we can
 just base the areas on the function start:
@@ -181,6 +181,7 @@ HISTORY
 ##### 1.30    RELEASEME
 - CHG: Rename :Uniq to :UniqAny and add :UniqSubsequent variant.
 - Add :SortEach generalization of :SortWORDs.
+- CHG: Rename :SortUnfolded to :SortVisible.
 
 ##### 1.21    26-Oct-2016
 - BUG: :SortUnfolded and :SortRangedBy... remove comment sigils (like "#")

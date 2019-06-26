@@ -1,8 +1,8 @@
-" Test sorting visible lines within a range.
+" Test sorting unique visible lines.
 
 edit functions.txt
 g/^function/,/^endfunction/fold
-3,26SortUnfolded
+SortVisible u
 
 call vimtest#SaveOut()
 call vimtest#Quit()

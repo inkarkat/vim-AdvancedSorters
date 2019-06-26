@@ -9,7 +9,7 @@ let g:string = "Hello  World"
 .
 
 setlocal foldmethod=marker formatoptions+=j comments=sO:\"\ -,mO:\"\ \ ,eO:\"\",:\"
-SortUnfolded
+SortVisible
 
 call vimtest#SaveOut()
 call vimtest#Quit()

@@ -1,8 +1,8 @@
-" Test case-insensitive reverse sorting of visible lines.
+" Test sorting visible lines.
 
 edit functions.txt
 g/^function/,/^endfunction/fold
-SortUnfolded! i
+SortVisible
 
 call vimtest#SaveOut()
 call vimtest#Quit()
