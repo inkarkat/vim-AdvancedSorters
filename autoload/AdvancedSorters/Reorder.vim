@@ -97,6 +97,40 @@ function! AdvancedSorters#Reorder#Unfolded( startLnum, endLnum, arguments ) abor
     return s:FoldedCommand(function('s:Unfolded'), a:startLnum, a:endLnum, a:arguments)
 endfunction
 
+function! s:ParsePatternAndExpression( arguments ) abort
+    let [l:separator, l:escapedPattern, l:expression] = ingo#cmdargs#pattern#Parse(a:arguments, '\s*\(.\{-}\)\s*')
+    if empty(l:expression)
+	throw 'ParsePatternAndExpression: Must pass both /{expr}/ and {reorder-expr}'
+    elseif empty(l:escapedPattern)
+	let [l:separator, l:pattern] = ['/', @/]
+    endif
+
+    let l:pattern = ingo#escape#Unescape(l:escapedPattern, l:separator)
+    call histadd('search', escape(l:pattern, '/'))
+    return [l:pattern, l:expression]
+endfunction
+function! s:RangesFromHeader( startLnum, endLnum, expr ) abort
+    let l:ranges = AdvancedSorters#GetRanges#FromHeader(a:startLnum, a:endLnum, a:expr)
+    let l:firstStartLnum = s:GetNextStartLnum(l:ranges)
+    if l:firstStartLnum != a:startLnum
+	call insert(l:ranges, [a:startLnum, l:firstStartLnum - 1], 0)
+    endif
+
+    return l:ranges
+endfunction
+function! AdvancedSorters#Reorder#ByHeader( startLnum, endLnum, arguments ) abort
+    try
+	let [l:headerExpr, l:reorderExpr] = s:ParsePatternAndExpression(a:arguments)
+    catch /^ParsePatternAndExpression:/
+	call ingo#err#SetCustomException('ParsePatternAndExpression')
+	return 0
+    endtry
+
+    return s:Command(function('s:RangesFromHeader'), function('s:WithIndividualLines'),
+    \   a:startLnum, a:endLnum, l:reorderExpr, l:headerExpr
+    \)
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
