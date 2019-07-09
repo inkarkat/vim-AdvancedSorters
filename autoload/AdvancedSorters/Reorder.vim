@@ -51,20 +51,19 @@ function! s:Weave( modifiedRanges, modifiedLines, otherRanges ) abort
     return l:result
 endfunction
 
-function! s:Command( Ranger, startLnum, endLnum, arguments ) abort
+function! s:Command( GetRanges, Ranger, startLnum, endLnum, arguments, ... ) abort
     try
 	let [l:startLnum, l:endLnum] = [ingo#range#NetStart(a:startLnum), ingo#range#NetEnd(a:endLnum)]
-	let l:foldedRanges = ingo#folds#GetClosedFolds(l:startLnum, l:endLnum)
-
-	let [l:reorderRanges, l:otherRangeIndex] = call(a:Ranger, [l:startLnum, l:endLnum, l:foldedRanges])
-	if l:otherRangeIndex == -1
+	let l:initialRanges = call(a:GetRanges, [l:startLnum, l:endLnum] + a:000)
+	let [l:reorderRanges, l:otherRangesIndex] = call(a:Ranger, [l:startLnum, l:endLnum, l:initialRanges])
+	if l:otherRangesIndex == -1
 	    let l:lines = s:ReorderLines(s:GetLinesFromRanges(l:reorderRanges), a:arguments)
 	else
-	    let l:ranges = [ingo#range#invert#Invert(l:startLnum, l:endLnum, l:reorderRanges)]
-	    call insert(l:ranges, l:foldedRanges, l:otherRangeIndex)
+	    let l:rangesPair = [ingo#range#invert#Invert(l:startLnum, l:endLnum, l:reorderRanges)]
+	    call insert(l:rangesPair, l:initialRanges, l:otherRangesIndex)
 
-	    let l:reorderedLines = s:ReorderLines(s:GetLinesFromRanges(copy(l:ranges[0])), a:arguments)
-	    let l:lines = s:Weave(l:ranges[0], l:reorderedLines, l:ranges[1])
+	    let l:reorderedLines = s:ReorderLines(s:GetLinesFromRanges(copy(l:rangesPair[0])), a:arguments)
+	    let l:lines = s:Weave(l:rangesPair[0], l:reorderedLines, l:rangesPair[1])
 	endif
 	call ingo#lines#Replace(l:startLnum, l:endLnum, l:lines)
 	return 1
@@ -73,26 +72,29 @@ function! s:Command( Ranger, startLnum, endLnum, arguments ) abort
 	return 0
     endtry
 endfunction
+function! s:FoldedCommand( Ranger, startLnum, endLnum, arguments ) abort
+    return s:Command(function('ingo#folds#GetClosedFolds'), a:Ranger, a:startLnum, a:endLnum, a:arguments)
+endfunction
 
 function! s:Visible( startLnum, endLnum, ranges ) abort
     return [s:AddIndividualLines(a:startLnum, a:endLnum, a:ranges), -1]
 endfunction
 function! AdvancedSorters#Reorder#Visible( startLnum, endLnum, arguments ) abort
-    return s:Command('s:Visible', a:startLnum, a:endLnum, a:arguments)
+    return s:FoldedCommand(function('s:Visible'), a:startLnum, a:endLnum, a:arguments)
 endfunction
 
 function! s:Folded( startLnum, endLnum, ranges ) abort
     return [a:ranges, 0]
 endfunction
 function! AdvancedSorters#Reorder#Folded( startLnum, endLnum, arguments ) abort
-    return s:Command('s:Folded', a:startLnum, a:endLnum, a:arguments)
+    return s:FoldedCommand(function('s:Folded'), a:startLnum, a:endLnum, a:arguments)
 endfunction
 
 function! s:Unfolded( startLnum, endLnum, ranges ) abort
     return [a:ranges, 1]
 endfunction
 function! AdvancedSorters#Reorder#Unfolded( startLnum, endLnum, arguments ) abort
-    return s:Command('s:Unfolded', a:startLnum, a:endLnum, a:arguments)
+    return s:FoldedCommand(function('s:Unfolded'), a:startLnum, a:endLnum, a:arguments)
 endfunction
 
 let &cpo = s:save_cpo
