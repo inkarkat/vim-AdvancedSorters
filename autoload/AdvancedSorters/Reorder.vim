@@ -54,16 +54,27 @@ function! s:Weave( modifiedRanges, modifiedLines, otherRanges ) abort
     return l:result
 endfunction
 
+function! s:NothingToReorderError() abort
+    call ingo#err#Set('Just a single range; nothing to reorder')
+    return 0
+endfunction
 function! s:Command( GetRanges, Ranger, startLnum, endLnum, arguments, ... ) abort
     try
 	let [l:startLnum, l:endLnum] = [ingo#range#NetStart(a:startLnum), ingo#range#NetEnd(a:endLnum)]
 	let l:initialRanges = call(a:GetRanges, [l:startLnum, l:endLnum] + a:000)
 	let [l:reorderRanges, l:otherRangesIndex] = call(a:Ranger, [l:startLnum, l:endLnum, l:initialRanges])
 	if l:otherRangesIndex == -1
+	    if len(l:reorderRanges) <= 1
+		return s:NothingToReorderError()
+	    endif
+
 	    let l:lines = s:ReorderLines(s:GetLinesFromRanges(l:reorderRanges), a:arguments)
 	else
 	    let l:rangesPair = [ingo#range#invert#Invert(l:startLnum, l:endLnum, l:reorderRanges)]
 	    call insert(l:rangesPair, l:initialRanges, l:otherRangesIndex)
+	    if len(l:rangesPair[0]) + len(l:rangesPair[1]) <= 1
+		return s:NothingToReorderError()
+	    endif
 
 	    let l:reorderedLines = s:ReorderLines(s:GetLinesFromRanges(copy(l:rangesPair[0])), a:arguments)
 	    let l:lines = s:Weave(l:rangesPair[0], l:reorderedLines, l:rangesPair[1])
