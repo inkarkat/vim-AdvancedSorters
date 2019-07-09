@@ -19,18 +19,44 @@ set cpo&vim
 command! -bang -range=% -nargs=* SortVisible
 \   call setline(<line1>, getline(<line1>)) |
 \   if ! AdvancedSorters#Ranges#Visible('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
-
 command! -bang -range=% -nargs=+ SortRangesByHeader
 \   call setline(<line1>, getline(<line1>)) |
 \   if ! AdvancedSorters#Ranges#ByHeader('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
-
 command! -bang -range=% -nargs=+ SortRangesByMatch
 \   call setline(<line1>, getline(<line1>)) |
 \   if ! AdvancedSorters#Ranges#ByMatch('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
-
 command! -bang -range=% -nargs=+ SortRangesByRange
 \   call setline(<line1>, getline(<line1>)) |
 \   if ! AdvancedSorters#Ranges#ByRange('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+
+
+command! -range=% -nargs=+ ReorderVisible
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#Visible(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderFolded
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#Folded(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderUnfolded
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#Unfolded(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderByHeader
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#ByHeader(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderOnlyByMatch
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#OnlyByMatch(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderByMatchAndNonMatches
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#ByMatchAndNonMatches(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderByMatchAndLines
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#ByMatchAndLines(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderOnlyByRange
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#OnlyByRange(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderByRangeAndNonMatches
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#ByRangeAndNonMatches(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
 
 
 command! -bang -range=% -nargs=1 -complete=expression SortByExpr
