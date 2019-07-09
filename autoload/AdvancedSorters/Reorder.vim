@@ -27,6 +27,11 @@ function! s:IdentityRanges( startLnum, endLnum, ranges ) abort
     return [a:ranges, -1]
 endfunction
 
+function! s:RangesAndNonMatches( startLnum, endLnum, ranges ) abort
+    call extend(a:ranges, ingo#range#invert#Invert(a:startLnum, a:endLnum, a:ranges))
+    return ingo#range#sort#AscendingByStartLnum(a:ranges)
+endfunction
+
 function! s:GetNextStartLnum( ranges ) abort
     return get(a:ranges, 0, [0x7FFFFFFF, 0x7FFFFFFF])[0]
 endfunction
@@ -166,9 +171,7 @@ function! AdvancedSorters#Reorder#OnlyByMatch( startLnum, endLnum, arguments ) a
 endfunction
 
 function! s:RangesFromMatchAndNonMatches( startLnum, endLnum, expr ) abort
-    let l:ranges = AdvancedSorters#GetRanges#FromMatch(a:startLnum, a:endLnum, a:expr)
-    call extend(l:ranges, ingo#range#invert#Invert(a:startLnum, a:endLnum, l:ranges))
-    return ingo#range#sort#AscendingByStartLnum(l:ranges)
+    return s:RangesAndNonMatches(a:startLnum, a:endLnum, AdvancedSorters#GetRanges#FromMatch(a:startLnum, a:endLnum, a:expr))
 endfunction
 function! AdvancedSorters#Reorder#ByMatchAndNonMatches( startLnum, endLnum, arguments ) abort
     return s:PatternAndExpressionCommand(
@@ -221,9 +224,7 @@ function! AdvancedSorters#Reorder#OnlyByRange( startLnum, endLnum, arguments ) a
 endfunction
 
 function! s:RangesFromRangeAndNonMatches( startLnum, endLnum, range ) abort
-    let l:ranges = AdvancedSorters#GetRanges#FromRange(a:startLnum, a:endLnum, a:range)
-    call extend(l:ranges, ingo#range#invert#Invert(a:startLnum, a:endLnum, l:ranges))
-    return ingo#range#sort#AscendingByStartLnum(l:ranges)
+    return s:RangesAndNonMatches(a:startLnum, a:endLnum, AdvancedSorters#GetRanges#FromRange(a:startLnum, a:endLnum, a:range))
 endfunction
 function! AdvancedSorters#Reorder#ByRangeAndNonMatches( startLnum, endLnum, arguments ) abort
     return s:RangeAndExpressionCommand(
