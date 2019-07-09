@@ -1,6 +1,7 @@
 " AdvancedSorters/Reorder.vim: Reordering of whole ranges as one unit.
 "
 " DEPENDENCIES:
+"   - ingo-library.vim plugin
 "
 " Copyright: (C) 2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
