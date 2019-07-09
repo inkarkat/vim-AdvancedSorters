@@ -52,8 +52,8 @@ endfunction
 function! AdvancedSorters#Reorder#Visible( startLnum, endLnum, arguments ) abort
     try
 	let [l:startLnum, l:endLnum] = [ingo#range#NetStart(a:startLnum), ingo#range#NetEnd(a:endLnum)]
-	let l:closedFolds = ingo#folds#GetClosedFolds(l:startLnum, l:endLnum)
-	let l:ranges = s:AddIndividualLines(l:startLnum, l:endLnum, l:closedFolds)
+	let l:foldedRanges = ingo#folds#GetClosedFolds(l:startLnum, l:endLnum)
+	let l:ranges = s:AddIndividualLines(l:startLnum, l:endLnum, l:foldedRanges)
 
 	let l:lines = s:GetLinesFromRanges(l:ranges)
 	let l:reorderedLines = s:ReorderLines(l:lines, a:arguments)
@@ -67,11 +67,26 @@ endfunction
 function! AdvancedSorters#Reorder#Folded( startLnum, endLnum, arguments ) abort
     try
 	let [l:startLnum, l:endLnum] = [ingo#range#NetStart(a:startLnum), ingo#range#NetEnd(a:endLnum)]
-	let l:closedFolds = ingo#folds#GetClosedFolds(l:startLnum, l:endLnum)
-	let l:other = ingo#range#invert#Invert(l:startLnum, l:endLnum, l:closedFolds)
+	let l:foldedRanges = ingo#folds#GetClosedFolds(l:startLnum, l:endLnum)
+	let l:unfoldedRanges = ingo#range#invert#Invert(l:startLnum, l:endLnum, l:foldedRanges)
 
-	let l:reorderedLines = s:ReorderLines(s:GetLinesFromRanges(copy(l:closedFolds)), a:arguments)
-	let l:lines = s:Weave(l:closedFolds, l:reorderedLines, l:other)
+	let l:reorderedLines = s:ReorderLines(s:GetLinesFromRanges(copy(l:foldedRanges)), a:arguments)
+	let l:lines = s:Weave(l:foldedRanges, l:reorderedLines, l:unfoldedRanges)
+	call ingo#lines#Replace(l:startLnum, l:endLnum, l:lines)
+	return 1
+    catch /^Vim\%((\a\+)\)\=:/
+	call ingo#err#SetVimException()
+	return 0
+    endtry
+endfunction
+function! AdvancedSorters#Reorder#Unfolded( startLnum, endLnum, arguments ) abort
+    try
+	let [l:startLnum, l:endLnum] = [ingo#range#NetStart(a:startLnum), ingo#range#NetEnd(a:endLnum)]
+	let l:foldedRanges = ingo#folds#GetClosedFolds(l:startLnum, l:endLnum)
+	let l:unfoldedRanges = ingo#range#invert#Invert(l:startLnum, l:endLnum, l:foldedRanges)
+
+	let l:reorderedLines = s:ReorderLines(s:GetLinesFromRanges(copy(l:unfoldedRanges)), a:arguments)
+	let l:lines = s:Weave(l:unfoldedRanges, l:reorderedLines, l:foldedRanges)
 	call ingo#lines#Replace(l:startLnum, l:endLnum, l:lines)
 	return 1
     catch /^Vim\%((\a\+)\)\=:/
