@@ -127,9 +127,15 @@ USAGE						       *AdvancedSorters-usage*
 :[range]ReorderOnlyByRange {range} {reorder-expr}
 			Each {range} (in the buffer / [range]) defines an area
 			that is reordered as one unit (joined with newlines),
-			together with units of non-matching lines, by passing
-			it (as v:val) to {reorder-expr}.
+			by passing it (as v:val) to {reorder-expr}. Those are
+			then re-inserted in between any non-matching lines,
+			which stay as they were.
 :[range]ReorderByRangeAndNonMatches {range} {reorder-expr}
+			Each {range} (in the buffer / [range]) defines an area
+			that is reordered as one unit (joined with newlines),
+			together with individual non-matching lines, by
+			passing it (as v:val) to {reorder-expr}.
+:[range]ReorderByRangeAndLines {range} {reorder-expr}
 			Each {range} (in the buffer / [range]) defines an area
 			that is reordered as one unit (joined with newlines),
 			together with individual non-matching lines, by

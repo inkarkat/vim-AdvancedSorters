@@ -57,6 +57,9 @@ command! -range=% -nargs=+ ReorderOnlyByRange
 command! -range=% -nargs=+ ReorderByRangeAndNonMatches
 \   call setline(<line1>, getline(<line1>)) |
 \   if ! AdvancedSorters#Reorder#ByRangeAndNonMatches(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderByRangeAndLines
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#ByRangeAndLines(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
 
 
 command! -bang -range=% -nargs=1 -complete=expression SortByExpr

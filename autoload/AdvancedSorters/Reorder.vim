@@ -235,6 +235,16 @@ function! AdvancedSorters#Reorder#ByRangeAndNonMatches( startLnum, endLnum, argu
     \)
 endfunction
 
+function! s:RangesFromRangeAndLines( startLnum, endLnum, range ) abort
+    return s:RangesAndLines(a:startLnum, a:endLnum, AdvancedSorters#GetRanges#FromRange(a:startLnum, a:endLnum, a:range))
+endfunction
+function! AdvancedSorters#Reorder#ByRangeAndLines( startLnum, endLnum, arguments ) abort
+    return s:RangeAndExpressionCommand(
+    \   function('s:RangesFromRangeAndLines'), function('s:IdentityRanges'),
+    \   a:startLnum, a:endLnum, a:arguments
+    \)
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
