@@ -32,4 +32,28 @@ function! AdvancedSorters#GetRanges#FromHeader( startLnum, endLnum, expr ) abort
     return l:ranges
 endfunction
 
+function! AdvancedSorters#GetRanges#FromMatch( startLnum, endLnum, expr )
+    let l:ranges = []
+    call cursor(a:startLnum, 1)
+    while line('.') <= a:endLnum
+	let l:startLnum = search(a:expr, 'cW', a:endLnum)
+	if l:startLnum == 0
+	    break
+	endif
+	let l:endLnum = search(a:expr, 'ceW', a:endLnum)
+	if l:endLnum == 0
+	    break
+	endif
+
+	call add(l:ranges, [l:startLnum, l:endLnum])
+
+	if l:endLnum == a:endLnum
+	    break
+	else
+	    call cursor(l:endLnum + 1, 1)
+	endif
+    endwhile
+    return l:ranges
+endfunction
+
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
