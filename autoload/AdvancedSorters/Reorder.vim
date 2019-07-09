@@ -40,6 +40,12 @@ function! s:WithIndividualLines( startLnum, endLnum, ranges ) abort
     return [s:AddIndividualLines(a:startLnum, a:endLnum, a:ranges), -1]
 endfunction
 
+function! s:ReorderOriginalRanges( startLnum, endLnum, ranges ) abort
+    return [a:ranges, 0]
+endfunction
+function! s:ReorderOtherRanges( startLnum, endLnum, ranges ) abort
+    return [a:ranges, 1]
+endfunction
 function! s:Weave( modifiedRanges, modifiedLines, otherRanges ) abort
     let l:result = []
     while ! empty(a:modifiedRanges) || ! empty(a:otherRanges)
@@ -94,18 +100,12 @@ function! AdvancedSorters#Reorder#Visible( startLnum, endLnum, arguments ) abort
     return s:FoldedCommand(function('s:WithIndividualLines'), a:startLnum, a:endLnum, a:arguments)
 endfunction
 
-function! s:Folded( startLnum, endLnum, ranges ) abort
-    return [a:ranges, 0]
-endfunction
 function! AdvancedSorters#Reorder#Folded( startLnum, endLnum, arguments ) abort
-    return s:FoldedCommand(function('s:Folded'), a:startLnum, a:endLnum, a:arguments)
+    return s:FoldedCommand(function('s:ReorderOriginalRanges'), a:startLnum, a:endLnum, a:arguments)
 endfunction
 
-function! s:Unfolded( startLnum, endLnum, ranges ) abort
-    return [a:ranges, 1]
-endfunction
 function! AdvancedSorters#Reorder#Unfolded( startLnum, endLnum, arguments ) abort
-    return s:FoldedCommand(function('s:Unfolded'), a:startLnum, a:endLnum, a:arguments)
+    return s:FoldedCommand(function('s:ReorderOtherRanges'), a:startLnum, a:endLnum, a:arguments)
 endfunction
 
 function! s:ParsePatternAndExpression( arguments ) abort
