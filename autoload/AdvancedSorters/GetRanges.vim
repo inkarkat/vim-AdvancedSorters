@@ -56,4 +56,27 @@ function! AdvancedSorters#GetRanges#FromMatch( startLnum, endLnum, expr )
     return l:ranges
 endfunction
 
+function! AdvancedSorters#GetRanges#FromRange( startLnum, endLnum, expr )
+    if empty(a:expr) | return [] | endif
+
+    " With ranges, there can be overlapping regions. To emulate a fold-like
+    " behavior (where folds can be contained in others), go through the list of
+    " unique line numbers and the list of lines where ranges end, and build the
+    " [startLnum, endLnum] list out of that.
+    let [l:recordedLines, l:startLines, l:endLines, l:didClobberSearchHistory] = ingo#range#lines#Get(a:startLnum, a:endLnum, a:expr)
+    let l:linesInRange = sort(map(keys(l:recordedLines), 'str2nr(v:val)'), 'ingo#collections#numsort')
+    call ingo#compat#uniq(l:endLines)
+    let l:ranges = []
+    while ! empty(l:endLines)
+	let l:startLnum = remove(l:linesInRange, 0)
+	let l:endLnum = remove(l:endLines, 0)
+	if l:startLnum < l:endLnum
+	    call add(l:ranges, [l:startLnum, l:endLnum])
+	    call remove(l:linesInRange, 0, index(l:linesInRange, l:endLnum))
+	endif
+    endwhile
+
+    return l:ranges
+endfunction
+
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
