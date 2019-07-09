@@ -95,6 +95,16 @@ endfunction
 function! s:FoldedCommand( Ranger, startLnum, endLnum, arguments ) abort
     return s:Command(function('ingo#folds#GetClosedFolds'), a:Ranger, a:startLnum, a:endLnum, a:arguments)
 endfunction
+function! s:PatternAndExpressionCommand( GetRanges, Ranger, startLnum, endLnum, arguments ) abort
+    try
+	let [l:headerExpr, l:reorderExpr] = s:ParsePatternAndExpression(a:arguments)
+    catch /^ParsePatternAndExpression:/
+	call ingo#err#SetCustomException('ParsePatternAndExpression')
+	return 0
+    endtry
+
+    return s:Command(a:GetRanges, a:Ranger, a:startLnum, a:endLnum, l:reorderExpr, l:headerExpr)
+endfunction
 
 function! AdvancedSorters#Reorder#Visible( startLnum, endLnum, arguments ) abort
     return s:FoldedCommand(function('s:WithIndividualLines'), a:startLnum, a:endLnum, a:arguments)
@@ -130,28 +140,16 @@ function! s:RangesFromHeader( startLnum, endLnum, expr ) abort
     return l:ranges
 endfunction
 function! AdvancedSorters#Reorder#ByHeader( startLnum, endLnum, arguments ) abort
-    try
-	let [l:headerExpr, l:reorderExpr] = s:ParsePatternAndExpression(a:arguments)
-    catch /^ParsePatternAndExpression:/
-	call ingo#err#SetCustomException('ParsePatternAndExpression')
-	return 0
-    endtry
-
-    return s:Command(function('s:RangesFromHeader'), function('s:WithIndividualLines'),
-    \   a:startLnum, a:endLnum, l:reorderExpr, l:headerExpr
+    return s:PatternAndExpressionCommand(
+    \   function('s:RangesFromHeader'), function('s:WithIndividualLines'),
+    \   a:startLnum, a:endLnum, a:arguments
     \)
 endfunction
 
 function! AdvancedSorters#Reorder#OnlyByMatch( startLnum, endLnum, arguments ) abort
-    try
-	let [l:matchExpr, l:reorderExpr] = s:ParsePatternAndExpression(a:arguments)
-    catch /^ParsePatternAndExpression:/
-	call ingo#err#SetCustomException('ParsePatternAndExpression')
-	return 0
-    endtry
-
-    return s:Command(function('AdvancedSorters#GetRanges#FromMatch'), function('s:ReorderOriginalRanges'),
-    \   a:startLnum, a:endLnum, l:reorderExpr, l:matchExpr
+    return s:PatternAndExpressionCommand(
+    \   function('AdvancedSorters#GetRanges#FromMatch'), function('s:ReorderOriginalRanges'),
+    \   a:startLnum, a:endLnum, a:arguments
     \)
 endfunction
 
