@@ -52,11 +52,12 @@ USAGE
                             Each match of {expr} (in the buffer / [range]) starts
                             a new area that sorts as one unit; i.e. the order of
                             the other lines inside the area does _not_ change!
+                            Lines before the first header are sorted individually.
 
     :[range]SortRangesByMatch[!] /{expr}/ [i][u][r][n][x][o] [/{pattern}/]
                             Each (multi-line) match of {expr} (in the buffer /
-                            [range]) defines an area that sorts as one unit.
-                            Non-matching lines are sorted individually.
+                            [range]) defines an area that sorts as one unit,
+                            together with individual non-matching lines.
 
     :[range]SortRangesByRange[!] {range} [i][u][r][n][x][o] [/{pattern}/]
                             Each {range} (in the buffer / [range]) defines an area
@@ -67,6 +68,74 @@ USAGE
 
                             Note: The text must not contain embedded <Nul>
                             characters (^@) for the above commands!
+
+    :[range]ReorderVisible {reorder-expr}
+                            Reorder visible lines in the buffer / [range] by
+                            collecting into a List of Strings (multiple folded
+                            lines are joined with newlines) and passing it (as
+                            v:val) to {reorder-expr}.
+
+    :[range]ReorderFolded {reorder-expr}
+                            Reorder folded lines in the buffer / [range] by
+                            collecting into a List of Strings (multiple folded
+                            lines are joined with newlines) and passing it (as
+                            v:val) to {reorder-expr}. Those are then re-inserted
+                            in between any unfolded lines, which stay as they
+                            were.
+
+    :[range]ReorderUnfolded {reorder-expr}
+                            Reorder unfolded lines in the buffer / [range] by
+                            collecting into a List of Strings (subsequent unfolded
+                            lines are joined with newlines) and passing it (as
+                            v:val) to {reorder-expr}. Those are then re-inserted
+                            in between any closed folds, which stay as they were.
+
+    :[range]ReorderByHeader /{expr}/ {reorder-expr}
+                            Each match of {expr} (in the buffer / [range]) starts
+                            a new area that is reordered as one unit (joined with
+                            newlines) by passing it (as v:val) to {reorder-expr}.
+                            Lines before the first header are reordered as another
+                            single unit.
+
+    :[range]ReorderOnlyByMatch /{expr}/ {reorder-expr}
+                            Each (multi-line) match of {expr} (in the buffer /
+                            [range]) defines an area that is reordered as one unit
+                            (joined with newlines) by passing it (as v:val) to
+                            {reorder-expr}. Those are then re-inserted in between
+                            any non-matching lines, which stay as they were.
+
+    :[range]ReorderByMatchAndNonMatches /{expr}/ {reorder-expr}
+                            Each (multi-line) match of {expr} (in the buffer /
+                            [range]) defines an area that is reordered as one unit
+                            (joined with newlines), together with units of
+                            non-matching lines, by passing it (as v:val) to
+                            {reorder-expr}.
+
+    :[range]ReorderByMatchAndLines /{expr}/ {reorder-expr}
+                            Each (multi-line) match of {expr} (in the buffer /
+                            [range]) defines an area that is reordered as one unit
+                            (joined with newlines), together with individual
+                            non-matching lines, by passing it (as v:val) to
+                            {reorder-expr}.
+
+    :[range]ReorderOnlyByRange {range} {reorder-expr}
+                            Each {range} (in the buffer / [range]) defines an area
+                            that is reordered as one unit (joined with newlines),
+                            by passing it (as v:val) to {reorder-expr}. Those are
+                            then re-inserted in between any non-matching lines,
+                            which stay as they were.
+
+    :[range]ReorderByRangeAndNonMatches {range} {reorder-expr}
+                            Each {range} (in the buffer / [range]) defines an area
+                            that is reordered as one unit (joined with newlines),
+                            together with individual non-matching lines, by
+                            passing it (as v:val) to {reorder-expr}.
+
+    :[range]ReorderByRangeAndLines {range} {reorder-expr}
+                            Each {range} (in the buffer / [range]) defines an area
+                            that is reordered as one unit (joined with newlines),
+                            together with individual non-matching lines, by
+                            passing it (as v:val) to {reorder-expr}.
 
     :[range]SortByExpr[!] {expr}
                             Sort lines in [range] by the {expr}, which should take
@@ -165,7 +234,7 @@ To uninstall, use the :RmVimball command.
 ### DEPENDENCIES
 
 - Requires Vim 7.0 or higher.
-- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.022 or
+- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.039 or
   higher.
 
 CONTRIBUTING
@@ -182,6 +251,11 @@ HISTORY
 - CHG: Rename :Uniq to :UniqAny and add :UniqSubsequent variant.
 - Add :SortEach generalization of :SortWORDs.
 - CHG: Rename :SortUnfolded to :SortVisible.
+- ENH: Add various :ReorderBy... commands that mirror the :SortVisible and
+  :SortRangedBy... commands, but allow arbitrary reorderings via a Vimscript
+  expression.
+
+__You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)) version 1.039!__
 
 ##### 1.21    26-Oct-2016
 - BUG: :SortUnfolded and :SortRangedBy... remove comment sigils (like "#")

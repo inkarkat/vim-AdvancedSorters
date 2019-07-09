@@ -75,59 +75,12 @@ endfunction
 
 
 
-function! s:ByHeader( startLnum, endLnum, expr )
-    let l:headerLnums = []
-    call cursor(a:startLnum, 1)
-    while line('.') <= a:endLnum
-	let l:lnum = search(a:expr, 'cW', a:endLnum)
-	if l:lnum == 0
-	    break
-	endif
-
-	call add(l:headerLnums, l:lnum)
-
-	if l:lnum == a:endLnum
-	    break
-	else
-	    call cursor(l:lnum + 1, 1)
-	endif
-    endwhile
-
-    let l:ranges = []
-    for l:i in range(len(l:headerLnums))
-	call add(l:ranges, [l:headerLnums[l:i], get(l:headerLnums,l:i + 1, a:endLnum + 1) - 1])
-    endfor
-    return l:ranges
-endfunction
 function! AdvancedSorters#Ranges#ByHeader( bang, startLnum, endLnum, arguments )
-    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseExpressionAndSortArguments'), 'headers', function('s:ByHeader'))
+    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseExpressionAndSortArguments'), 'headers', function('AdvancedSorters#GetRanges#FromHeader'))
 endfunction
 
-function! s:ByMatch( startLnum, endLnum, expr )
-    let l:ranges = []
-    call cursor(a:startLnum, 1)
-    while line('.') <= a:endLnum
-	let l:startLnum = search(a:expr, 'cW', a:endLnum)
-	if l:startLnum == 0
-	    break
-	endif
-	let l:endLnum = search(a:expr, 'ceW', a:endLnum)
-	if l:endLnum == 0
-	    break
-	endif
-
-	call add(l:ranges, [l:startLnum, l:endLnum])
-
-	if l:endLnum == a:endLnum
-	    break
-	else
-	    call cursor(l:endLnum + 1, 1)
-	endif
-    endwhile
-    return l:ranges
-endfunction
 function! AdvancedSorters#Ranges#ByMatch( bang, startLnum, endLnum, arguments )
-    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseExpressionAndSortArguments'), 'matches', function('s:ByMatch'))
+    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseExpressionAndSortArguments'), 'matches', function('AdvancedSorters#GetRanges#FromMatch'))
 endfunction
 
 function! s:ParseRangeAndSortArguments( arguments )
@@ -148,30 +101,8 @@ function! s:ParseRangeAndSortArguments( arguments )
     endif
     return l:parsedRange[3:4]
 endfunction
-function! s:ByRange( startLnum, endLnum, expr )
-    if empty(a:expr) | return [] | endif
-
-    " With ranges, there can be overlapping regions. To emulate a fold-like
-    " behavior (where folds can be contained in others), go through the list of
-    " unique line numbers and the list of lines where ranges end, and build the
-    " [startLnum, endLnum] list out of that.
-    let [l:recordedLines, l:startLines, l:endLines, l:didClobberSearchHistory] = ingo#range#lines#Get(a:startLnum, a:endLnum, a:expr)
-    let l:linesInRange = sort(map(keys(l:recordedLines), 'str2nr(v:val)'), 'ingo#collections#numsort')
-    call ingo#compat#uniq(l:endLines)
-    let l:ranges = []
-    while ! empty(l:endLines)
-	let l:startLnum = remove(l:linesInRange, 0)
-	let l:endLnum = remove(l:endLines, 0)
-	if l:startLnum < l:endLnum
-	    call add(l:ranges, [l:startLnum, l:endLnum])
-	    call remove(l:linesInRange, 0, index(l:linesInRange, l:endLnum))
-	endif
-    endwhile
-
-    return l:ranges
-endfunction
 function! AdvancedSorters#Ranges#ByRange( bang, startLnum, endLnum, arguments )
-    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseRangeAndSortArguments'), 'ranges', function('s:ByRange'))
+    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseRangeAndSortArguments'), 'ranges', function('AdvancedSorters#GetRanges#FromRange'))
 endfunction
 
 let &cpo = s:save_cpo
