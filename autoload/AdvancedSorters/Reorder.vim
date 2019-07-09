@@ -105,16 +105,8 @@ endfunction
 function! s:FoldedCommand( Ranger, startLnum, endLnum, arguments ) abort
     return s:Command(function('ingo#folds#GetClosedFolds'), a:Ranger, a:startLnum, a:endLnum, a:arguments)
 endfunction
-function! s:PatternAndExpressionCommand( GetRanges, Ranger, startLnum, endLnum, arguments ) abort
-    try
-	let [l:headerExpr, l:reorderExpr] = s:ParsePatternAndExpression(a:arguments)
-    catch /^ParsePatternAndExpression:/
-	call ingo#err#SetCustomException('ParsePatternAndExpression')
-	return 0
-    endtry
 
-    return s:Command(a:GetRanges, a:Ranger, a:startLnum, a:endLnum, l:reorderExpr, l:headerExpr)
-endfunction
+
 
 function! AdvancedSorters#Reorder#Visible( startLnum, endLnum, arguments ) abort
     return s:FoldedCommand(function('s:WithIndividualLines'), a:startLnum, a:endLnum, a:arguments)
@@ -139,6 +131,16 @@ function! s:ParsePatternAndExpression( arguments ) abort
     let l:pattern = ingo#escape#Unescape(l:escapedPattern, l:separator)
     call histadd('search', escape(l:pattern, '/'))
     return [l:pattern, l:expression]
+endfunction
+function! s:PatternAndExpressionCommand( GetRanges, Ranger, startLnum, endLnum, arguments ) abort
+    try
+	let [l:pattern, l:reorderExpr] = s:ParsePatternAndExpression(a:arguments)
+    catch /^ParsePatternAndExpression:/
+	call ingo#err#SetCustomException('ParsePatternAndExpression')
+	return 0
+    endtry
+
+    return s:Command(a:GetRanges, a:Ranger, a:startLnum, a:endLnum, l:reorderExpr, l:pattern)
 endfunction
 function! s:RangesFromHeader( startLnum, endLnum, expr ) abort
     let l:ranges = AdvancedSorters#GetRanges#FromHeader(a:startLnum, a:endLnum, a:expr)
@@ -189,6 +191,31 @@ endfunction
 function! AdvancedSorters#Reorder#ByMatchAndLines( startLnum, endLnum, arguments ) abort
     return s:PatternAndExpressionCommand(
     \   function('s:RangesFromMatchAndLines'), function('s:IdentityRanges'),
+    \   a:startLnum, a:endLnum, a:arguments
+    \)
+endfunction
+
+function! s:ParseRangeAndExpression( arguments ) abort
+    let l:parsedRange = ingo#cmdargs#range#Parse(a:arguments, {'isParseFirstRange': 1, 'commandExpr': '\s\+\(.\{-}\)\s*$'})
+    if empty(l:parsedRange)
+	throw 'ParseRangeAndExpression: Must pass both {range} and {reorder-expr}'
+    endif
+
+    return l:parsedRange[3:4]
+endfunction
+function! s:RangeAndExpressionCommand( GetRanges, Ranger, startLnum, endLnum, arguments ) abort
+    try
+	let [l:range, l:reorderExpr] = s:ParseRangeAndExpression(a:arguments)
+    catch /^ParseRangeAndExpression:/
+	call ingo#err#SetCustomException('ParseRangeAndExpression')
+	return 0
+    endtry
+
+    return s:Command(a:GetRanges, a:Ranger, a:startLnum, a:endLnum, l:reorderExpr, l:range)
+endfunction
+function! AdvancedSorters#Reorder#OnlyByRange( startLnum, endLnum, arguments ) abort
+    return s:RangeAndExpressionCommand(
+    \   function('AdvancedSorters#GetRanges#FromRange'), function('s:ReorderOriginalRanges'),
     \   a:startLnum, a:endLnum, a:arguments
     \)
 endfunction
