@@ -9,8 +9,14 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! s:GetJoinedTextFromRange( range ) abort
+    return (a:range[0] == a:range[1] ?
+    \   getline(a:range[0]) :
+    \   join(getline(a:range[0], a:range[1]), "\n")
+    \)
+endfunction
 function! s:GetLinesFromRanges( ranges ) abort
-    return map(a:ranges, 'v:val[0] == v:val[1] ? getline(v:val[0]) : join(getline(v:val[0], v:val[1]), "\n")')
+    return map(a:ranges, 's:GetJoinedTextFromRange(v:val)')
 endfunction
 
 function! s:ReorderLines( lines, expr ) abort
@@ -58,7 +64,7 @@ function! s:Weave( modifiedRanges, modifiedLines, otherRanges ) abort
 	    call add(l:result, remove(a:modifiedLines, 0))
 	else
 	    let l:range = remove(a:otherRanges, 0)
-	    call add(l:result, join(getline(l:range[0], l:range[1]), "\n"))
+	    call add(l:result, s:GetJoinedTextFromRange(l:range))
 	endif
     endwhile
     return l:result
