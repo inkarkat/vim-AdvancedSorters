@@ -220,6 +220,18 @@ function! AdvancedSorters#Reorder#OnlyByRange( startLnum, endLnum, arguments ) a
     \)
 endfunction
 
+function! s:RangesFromRangeAndNonMatches( startLnum, endLnum, range ) abort
+    let l:ranges = AdvancedSorters#GetRanges#FromRange(a:startLnum, a:endLnum, a:range)
+    call extend(l:ranges, ingo#range#invert#Invert(a:startLnum, a:endLnum, l:ranges))
+    return ingo#range#sort#AscendingByStartLnum(l:ranges)
+endfunction
+function! AdvancedSorters#Reorder#ByRangeAndNonMatches( startLnum, endLnum, arguments ) abort
+    return s:RangeAndExpressionCommand(
+    \   function('s:RangesFromRangeAndNonMatches'), function('s:IdentityRanges'),
+    \   a:startLnum, a:endLnum, a:arguments
+    \)
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
