@@ -142,6 +142,19 @@ function! AdvancedSorters#Reorder#ByHeader( startLnum, endLnum, arguments ) abor
     \)
 endfunction
 
+function! AdvancedSorters#Reorder#OnlyByMatch( startLnum, endLnum, arguments ) abort
+    try
+	let [l:matchExpr, l:reorderExpr] = s:ParsePatternAndExpression(a:arguments)
+    catch /^ParsePatternAndExpression:/
+	call ingo#err#SetCustomException('ParsePatternAndExpression')
+	return 0
+    endtry
+
+    return s:Command(function('AdvancedSorters#GetRanges#FromMatch'), function('s:ReorderOriginalRanges'),
+    \   a:startLnum, a:endLnum, l:reorderExpr, l:matchExpr
+    \)
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
