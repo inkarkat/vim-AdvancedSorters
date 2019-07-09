@@ -227,7 +227,7 @@ To uninstall, use the |:RmVimball| command.
 DEPENDENCIES					*AdvancedSorters-dependencies*
 
 - Requires Vim 7.0 or higher.
-- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.022 or
+- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.039 or
   higher.
 
 ==============================================================================
@@ -252,6 +252,7 @@ HISTORY						     *AdvancedSorters-history*
 - CHG: Rename :Uniq to :UniqAny and add :UniqSubsequent variant.
 - Add :SortEach generalization of :SortWORDs.
 - CHG: Rename :SortUnfolded to :SortVisible.
+  *** You need to update to ingo-library (vimscript #4433) version 1.039! ***
 
 1.21	26-Oct-2016
 - BUG: :SortUnfolded and :SortRangedBy... remove comment sigils (like "#")
