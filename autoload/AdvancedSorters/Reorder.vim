@@ -36,6 +36,9 @@ function! s:AddIndividualLines( startLnum, endLnum, ranges ) abort
     endwhile
     return l:result
 endfunction
+function! s:WithIndividualLines( startLnum, endLnum, ranges ) abort
+    return [s:AddIndividualLines(a:startLnum, a:endLnum, a:ranges), -1]
+endfunction
 
 function! s:Weave( modifiedRanges, modifiedLines, otherRanges ) abort
     let l:result = []
@@ -76,11 +79,8 @@ function! s:FoldedCommand( Ranger, startLnum, endLnum, arguments ) abort
     return s:Command(function('ingo#folds#GetClosedFolds'), a:Ranger, a:startLnum, a:endLnum, a:arguments)
 endfunction
 
-function! s:Visible( startLnum, endLnum, ranges ) abort
-    return [s:AddIndividualLines(a:startLnum, a:endLnum, a:ranges), -1]
-endfunction
 function! AdvancedSorters#Reorder#Visible( startLnum, endLnum, arguments ) abort
-    return s:FoldedCommand(function('s:Visible'), a:startLnum, a:endLnum, a:arguments)
+    return s:FoldedCommand(function('s:WithIndividualLines'), a:startLnum, a:endLnum, a:arguments)
 endfunction
 
 function! s:Folded( startLnum, endLnum, ranges ) abort
