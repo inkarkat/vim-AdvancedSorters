@@ -75,32 +75,8 @@ endfunction
 
 
 
-function! s:ByHeader( startLnum, endLnum, expr )
-    let l:headerLnums = []
-    call cursor(a:startLnum, 1)
-    while line('.') <= a:endLnum
-	let l:lnum = search(a:expr, 'cW', a:endLnum)
-	if l:lnum == 0
-	    break
-	endif
-
-	call add(l:headerLnums, l:lnum)
-
-	if l:lnum == a:endLnum
-	    break
-	else
-	    call cursor(l:lnum + 1, 1)
-	endif
-    endwhile
-
-    let l:ranges = []
-    for l:i in range(len(l:headerLnums))
-	call add(l:ranges, [l:headerLnums[l:i], get(l:headerLnums,l:i + 1, a:endLnum + 1) - 1])
-    endfor
-    return l:ranges
-endfunction
 function! AdvancedSorters#Ranges#ByHeader( bang, startLnum, endLnum, arguments )
-    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseExpressionAndSortArguments'), 'headers', function('s:ByHeader'))
+    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseExpressionAndSortArguments'), 'headers', function('AdvancedSorters#GetRanges#FromHeader'))
 endfunction
 
 function! s:ByMatch( startLnum, endLnum, expr )
