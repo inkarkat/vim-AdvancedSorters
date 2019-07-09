@@ -17,6 +17,10 @@ function! s:ReorderLines( lines, expr ) abort
     return ingo#actions#EvaluateWithVal(a:expr, a:lines)
 endfunction
 
+function! s:IdentityRanges( startLnum, endLnum, ranges ) abort
+    return [a:ranges, -1]
+endfunction
+
 function! s:GetNextStartLnum( ranges ) abort
     return get(a:ranges, 0, [0x7FFFFFFF, 0x7FFFFFFF])[0]
 endfunction
@@ -149,6 +153,18 @@ endfunction
 function! AdvancedSorters#Reorder#OnlyByMatch( startLnum, endLnum, arguments ) abort
     return s:PatternAndExpressionCommand(
     \   function('AdvancedSorters#GetRanges#FromMatch'), function('s:ReorderOriginalRanges'),
+    \   a:startLnum, a:endLnum, a:arguments
+    \)
+endfunction
+
+function! s:RangesFromMatchAndNonMatches( startLnum, endLnum, expr ) abort
+    let l:ranges = AdvancedSorters#GetRanges#FromMatch(a:startLnum, a:endLnum, a:expr)
+    call extend(l:ranges, ingo#range#invert#Invert(a:startLnum, a:endLnum, l:ranges))
+    return ingo#range#sort#AscendingByStartLnum(l:ranges)
+endfunction
+function! AdvancedSorters#Reorder#ByMatchAndNonMatches( startLnum, endLnum, arguments ) abort
+    return s:PatternAndExpressionCommand(
+    \   function('s:RangesFromMatchAndNonMatches'), function('s:IdentityRanges'),
     \   a:startLnum, a:endLnum, a:arguments
     \)
 endfunction
