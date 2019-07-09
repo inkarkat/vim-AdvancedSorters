@@ -175,6 +175,24 @@ function! AdvancedSorters#Reorder#ByMatchAndNonMatches( startLnum, endLnum, argu
     \)
 endfunction
 
+function! s:SingleLineRanges( ranges ) abort
+    return ingo#collections#Flatten1(map(a:ranges, 's:ExpandRange(v:val)'))
+endfunction
+function! s:ExpandRange( range ) abort
+    return map(range(a:range[0], a:range[1]), '[v:val, v:val]')
+endfunction
+function! s:RangesFromMatchAndLines( startLnum, endLnum, expr ) abort
+    let l:ranges = AdvancedSorters#GetRanges#FromMatch(a:startLnum, a:endLnum, a:expr)
+    call extend(l:ranges, s:SingleLineRanges(ingo#range#invert#Invert(a:startLnum, a:endLnum, l:ranges)))
+    return ingo#range#sort#AscendingByStartLnum(l:ranges)
+endfunction
+function! AdvancedSorters#Reorder#ByMatchAndLines( startLnum, endLnum, arguments ) abort
+    return s:PatternAndExpressionCommand(
+    \   function('s:RangesFromMatchAndLines'), function('s:IdentityRanges'),
+    \   a:startLnum, a:endLnum, a:arguments
+    \)
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
