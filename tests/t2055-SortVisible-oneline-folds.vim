@@ -8,7 +8,7 @@ edit functions.txt
 20vsplit
 
 g/^/fold
-SortUnfolded
+SortVisible
 
 call vimtest#SaveOut()
 call vimtest#Quit()

@@ -7,18 +7,6 @@
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"   1.30.007	04-Jun-2019	Add :SortEach generalization of :SortWORDs.
-"   1.30.006	16-Jun-2017	CHG: Rename :Uniq to :UniqAny and add
-"				:UniqSubsequent variant.
-"   1.20.005	03-Feb-2015	Add :Uniq command.
-"   1.10.004	06-Nov-2014	Add :SortWORDs command.
-"   1.00.003	10-Jun-2014	Add :SortRangesByRange command.
-"				Add :SortByExprUnique variant.
-"	002	08-Jun-2014	Have :SortBy... commands check for buffer
-"				modifiablity and handle errors, too.
-"	001	08-Jun-2014	file creation
 
 " Avoid installing twice or when in unsupported Vim version.
 if exists('g:loaded_AdvancedSorters') || (v:version < 700)
@@ -28,21 +16,50 @@ let g:loaded_AdvancedSorters = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-command! -bang -range=% -nargs=* SortUnfolded
+command! -bang -range=% -nargs=* SortVisible
 \   call setline(<line1>, getline(<line1>)) |
-\   if ! AdvancedSorters#Ranges#Unfolded('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
-
+\   if ! AdvancedSorters#Ranges#Visible('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
 command! -bang -range=% -nargs=+ SortRangesByHeader
 \   call setline(<line1>, getline(<line1>)) |
 \   if ! AdvancedSorters#Ranges#ByHeader('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
-
 command! -bang -range=% -nargs=+ SortRangesByMatch
 \   call setline(<line1>, getline(<line1>)) |
 \   if ! AdvancedSorters#Ranges#ByMatch('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
-
 command! -bang -range=% -nargs=+ SortRangesByRange
 \   call setline(<line1>, getline(<line1>)) |
 \   if ! AdvancedSorters#Ranges#ByRange('<bang>', <line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+
+
+command! -range=% -nargs=+ ReorderVisible
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#Visible(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderFolded
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#Folded(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderUnfolded
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#Unfolded(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderByHeader
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#ByHeader(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderOnlyByMatch
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#OnlyByMatch(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderByMatchAndNonMatches
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#ByMatchAndNonMatches(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderByMatchAndLines
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#ByMatchAndLines(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderOnlyByRange
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#OnlyByRange(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderByRangeAndNonMatches
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#ByRangeAndNonMatches(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
+command! -range=% -nargs=+ ReorderByRangeAndLines
+\   call setline(<line1>, getline(<line1>)) |
+\   if ! AdvancedSorters#Reorder#ByRangeAndLines(<line1>, <line2>, <q-args>) | echoerr ingo#err#Get() | endif
 
 
 command! -bang -range=% -nargs=1 -complete=expression SortByExpr

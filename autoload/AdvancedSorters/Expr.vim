@@ -4,24 +4,10 @@
 "   - ingo/actions.vim autoload script
 "   - ingo/err.vim autoload script
 "
-" Copyright: (C) 2014 Ingo Karkat
+" Copyright: (C) 2014-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"   1.00.003	10-Jun-2014	Implement unique sorting via additional
-"				a:isUnique flag.
-"	002	08-Jun-2014	Catch exceptions to avoid that the same
-"				expression error is printed for all lines.
-"				Silence the substitution messages.
-"				Pass in the range instead of using
-"				function-range to allow returning the success.
-"				Undo the (first) substitution (assuming it
-"				caused the exception) on failure. Else, the
-"				entire range will be reduced to empty lines when
-"				there's a problem with the passed expression.
-"	001	08-Jun-2014	file creation
 
 function! AdvancedSorters#Expr#Sort( startLnum, endLnum, isReverse, isUnique, expr )
     try
