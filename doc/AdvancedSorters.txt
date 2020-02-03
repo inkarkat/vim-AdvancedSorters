@@ -264,7 +264,7 @@ below).
 ==============================================================================
 HISTORY						     *AdvancedSorters-history*
 
-1.30	RELEASEME
+1.30	03-Feb-2020
 - CHG: Rename :Uniq to :UniqAny and add :UniqSubsequent variant.
 - Add :SortEach generalization of :SortWORDs.
 - CHG: Rename :SortUnfolded to :SortVisible.
@@ -306,7 +306,7 @@ First published version.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2012-2019 Ingo Karkat
+Copyright: (C) 2012-2020 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>

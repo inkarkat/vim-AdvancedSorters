@@ -247,7 +247,7 @@ below).
 HISTORY
 ------------------------------------------------------------------------------
 
-##### 1.30    RELEASEME
+##### 1.30    03-Feb-2020
 - CHG: Rename :Uniq to :UniqAny and add :UniqSubsequent variant.
 - Add :SortEach generalization of :SortWORDs.
 - CHG: Rename :SortUnfolded to :SortVisible.
@@ -292,7 +292,7 @@ __You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scrip
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2012-2019 Ingo Karkat -
+Copyright: (C) 2012-2020 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
 Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;
