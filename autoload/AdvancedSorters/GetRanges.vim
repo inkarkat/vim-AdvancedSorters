@@ -1,8 +1,9 @@
 " AdvancedSorters/GetRanges.vim: Functions to obtain ranges.
 "
 " DEPENDENCIES:
+"   - ingo-library.vim plugin
 "
-" Copyright: (C) 2019 Ingo Karkat
+" Copyright: (C) 2019-2021 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -64,7 +65,7 @@ function! AdvancedSorters#GetRanges#FromRange( startLnum, endLnum, expr )
     " unique line numbers and the list of lines where ranges end, and build the
     " [startLnum, endLnum] list out of that.
     let [l:recordedLines, l:startLines, l:endLines, l:didClobberSearchHistory] = ingo#range#lines#Get(a:startLnum, a:endLnum, a:expr)
-    let l:linesInRange = sort(map(keys(l:recordedLines), 'str2nr(v:val)'), 'ingo#collections#numsort')
+    let l:linesInRange = sort(ingo#list#transform#str2nr(keys(l:recordedLines)), 'ingo#collections#numsort')
     call ingo#compat#uniq(l:endLines)
     let l:ranges = []
     while ! empty(l:endLines)

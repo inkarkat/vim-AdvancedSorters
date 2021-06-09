@@ -243,7 +243,7 @@ To uninstall, use the |:RmVimball| command.
 DEPENDENCIES					*AdvancedSorters-dependencies*
 
 - Requires Vim 7.0 or higher.
-- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.039 or
+- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.043 or
   higher.
 
 ==============================================================================
@@ -263,6 +263,9 @@ below).
 
 ==============================================================================
 HISTORY						     *AdvancedSorters-history*
+
+1.31	RELEASEME
+  *** You need to update to ingo-library (vimscript #4433) version 1.043! ***
 
 1.30	03-Feb-2020
 - CHG: Rename :Uniq to :UniqAny and add :UniqSubsequent variant.
@@ -306,7 +309,7 @@ First published version.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2012-2020 Ingo Karkat
+Copyright: (C) 2012-2021 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
