@@ -3,7 +3,7 @@
 " DEPENDENCIES:
 "   - ingo-library.vim plugin
 "
-" Copyright: (C) 2014-2019 Ingo Karkat
+" Copyright: (C) 2014-2021 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -76,11 +76,11 @@ endfunction
 
 
 function! AdvancedSorters#Ranges#ByHeader( bang, startLnum, endLnum, arguments )
-    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseExpressionAndSortArguments'), 'headers', function('AdvancedSorters#GetRanges#FromHeader'))
+    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseExpressionAndSortArguments'), 'headers', function('ingo#ranges#FromHeader'))
 endfunction
 
 function! AdvancedSorters#Ranges#ByMatch( bang, startLnum, endLnum, arguments )
-    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseExpressionAndSortArguments'), 'matches', function('AdvancedSorters#GetRanges#FromMatch'))
+    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseExpressionAndSortArguments'), 'matches', function('ingo#ranges#FromMatch'))
 endfunction
 
 function! s:ParseRangeAndSortArguments( arguments )
@@ -102,7 +102,7 @@ function! s:ParseRangeAndSortArguments( arguments )
     return l:parsedRange[3:4]
 endfunction
 function! AdvancedSorters#Ranges#ByRange( bang, startLnum, endLnum, arguments )
-    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseRangeAndSortArguments'), 'ranges', function('AdvancedSorters#GetRanges#FromRange'))
+    return s:JoinRanges(a:bang, a:startLnum, a:endLnum, a:arguments, function('s:ParseRangeAndSortArguments'), 'ranges', function('ingo#ranges#FromRange'))
 endfunction
 
 let &cpo = s:save_cpo
