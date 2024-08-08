@@ -45,7 +45,7 @@ function! AdvancedSorters#Ranges#Visible( bang, startLnum, endLnum, sortArgs )
     return s:SortRanges(a:bang, l:startLnum, l:endLnum, a:sortArgs, 'folds', l:foldNum, l:joinCnt)
 endfunction
 
-let s:sortFlagsExpr = '[iurnxo[:space:]]'
+let s:sortFlagsExpr = '[bfilnorux[:space:]]'
 function! AdvancedSorters#Ranges#GetSortArgumentsExpr( captureNum, flagsBeforePatternCardinality, ... )
     return '\s*\(' .
     \   s:sortFlagsExpr . a:flagsBeforePatternCardinality .
