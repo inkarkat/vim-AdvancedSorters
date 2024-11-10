@@ -42,28 +42,28 @@ characters and by the line's display width.
 USAGE
 ------------------------------------------------------------------------------
 
-    :[range]SortVisible[!] [i][u][r][n][x][o] [/{pattern}/]
+    :[range]SortVisible[!] [b][f][i][l][n][o][r][u][x] [/{pattern}/]
                             Sort visible lines in the buffer / [range]. Lines
                             inside closed folds are kept intact; sorting is done
                             on all lines of the fold as one unit; i.e. the order
                             of the other lines inside the fold does _not_ change!
 
-    :[range]SortRangesByHeader[!] /{expr}/ [i][u][r][n][x][o] [/{pattern}/]
+    :[range]SortRangesByHeader[!] /{expr}/ [b][f][i][l][n][o][r][u][x] [/{pattern}/]
                             Each match of {expr} (in the buffer / [range]) starts
                             a new area that sorts as one unit; i.e. the order of
                             the other lines inside the area does _not_ change!
                             Lines before the first header are sorted individually.
 
-    :[range]SortRangesByMatch[!] /{expr}/ [i][u][r][n][x][o] [/{pattern}/]
+    :[range]SortRangesByMatch[!] /{expr}/ [b][f][i][l][n][o][r][u][x] [/{pattern}/]
                             Each (multi-line) match of {expr} (in the buffer /
                             [range]) defines an area that sorts as one unit,
                             together with individual non-matching lines.
 
-    :[range]SortRangesByRange[!] {range} [i][u][r][n][x][o] [/{pattern}/]
+    :[range]SortRangesByRange[!] {range} [b][f][i][l][n][o][r][u][x] [/{pattern}/]
                             Each {range} (in the buffer / [range]) defines an area
                             that sorts as one unit.
                             Note: For this command, /{pattern}/ must be separated
-                            from the {range} by a [i][u][r][n][x][o] flag or a
+                            from the {range} by a [b][f][i][l][n][o][r][u][x] flag or a
                             space; you cannot directly concatenate them.
 
                             Note: The text must not contain embedded <Nul>
@@ -154,13 +154,13 @@ USAGE
                             Sort lines in [range] by the display width.
 
     :[range]SortEach /{delimiter-pattern}/[{joiner}/]
-    :[range]SortEach /{delimiter-pattern}/[{joiner}]/ [i][u][r][n][x][o] /{pattern}/
+    :[range]SortEach /{delimiter-pattern}/[{joiner}]/ [b][f][i][l][n][o][r][u][x] /{pattern}/
                             Sort individual elements delimited by
                             {delimiter-pattern} (or newlines) in the current line
                             / [range], and join them back together with the first
                             matching delimiter [or {joiner}].
 
-    :[range]SortWORDs[!] [i][u][r][n][x][o] [/{pattern}/]
+    :[range]SortWORDs[!] [b][f][i][l][n][o][r][u][x] [/{pattern}/]
                             Sort individual (whitespace-delimited) WORDs in the
                             current line / [range].
 
@@ -234,7 +234,7 @@ To uninstall, use the :RmVimball command.
 ### DEPENDENCIES
 
 - Requires Vim 7.0 or higher.
-- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.039 or
+- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.043 or
   higher.
 
 CONTRIBUTING
@@ -246,6 +246,12 @@ below).
 
 HISTORY
 ------------------------------------------------------------------------------
+
+##### 1.31    10-Nov-2024
+- Adapt: Support new [b][f][l] sort flags (introduced in Vim 7.4.1027,
+  7.4.1143, 8.2.1933).
+
+__You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)) version 1.043!__
 
 ##### 1.30    03-Feb-2020
 - CHG: Rename :Uniq to :UniqAny and add :UniqSubsequent variant.
@@ -292,7 +298,7 @@ __You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scrip
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2012-2020 Ingo Karkat -
+Copyright: (C) 2012-2024 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
 Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;

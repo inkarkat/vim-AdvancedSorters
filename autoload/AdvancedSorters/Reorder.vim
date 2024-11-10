@@ -3,7 +3,7 @@
 " DEPENDENCIES:
 "   - ingo-library.vim plugin
 "
-" Copyright: (C) 2019 Ingo Karkat
+" Copyright: (C) 2019-2021 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -153,7 +153,7 @@ function! s:PatternAndExpressionCommand( GetRanges, Ranger, startLnum, endLnum, 
     return s:Command(a:GetRanges, a:Ranger, a:startLnum, a:endLnum, l:reorderExpr, l:pattern)
 endfunction
 function! s:RangesFromHeader( startLnum, endLnum, expr ) abort
-    let l:ranges = AdvancedSorters#GetRanges#FromHeader(a:startLnum, a:endLnum, a:expr)
+    let l:ranges = ingo#ranges#FromHeader(a:startLnum, a:endLnum, a:expr)
     let l:firstStartLnum = s:GetNextStartLnum(l:ranges)
     if l:firstStartLnum != a:startLnum
 	call insert(l:ranges, [a:startLnum, l:firstStartLnum - 1], 0)
@@ -170,13 +170,13 @@ endfunction
 
 function! AdvancedSorters#Reorder#OnlyByMatch( startLnum, endLnum, arguments ) abort
     return s:PatternAndExpressionCommand(
-    \   function('AdvancedSorters#GetRanges#FromMatch'), function('s:ReorderOriginalRanges'),
+    \   function('ingo#ranges#FromMatch'), function('s:ReorderOriginalRanges'),
     \   a:startLnum, a:endLnum, a:arguments
     \)
 endfunction
 
 function! s:RangesFromMatchAndNonMatches( startLnum, endLnum, expr ) abort
-    return s:RangesAndNonMatches(a:startLnum, a:endLnum, AdvancedSorters#GetRanges#FromMatch(a:startLnum, a:endLnum, a:expr))
+    return s:RangesAndNonMatches(a:startLnum, a:endLnum, ingo#ranges#FromMatch(a:startLnum, a:endLnum, a:expr))
 endfunction
 function! AdvancedSorters#Reorder#ByMatchAndNonMatches( startLnum, endLnum, arguments ) abort
     return s:PatternAndExpressionCommand(
@@ -192,7 +192,7 @@ function! s:ExpandRange( range ) abort
     return map(range(a:range[0], a:range[1]), '[v:val, v:val]')
 endfunction
 function! s:RangesFromMatchAndLines( startLnum, endLnum, expr ) abort
-    return s:RangesAndLines(a:startLnum, a:endLnum, AdvancedSorters#GetRanges#FromMatch(a:startLnum, a:endLnum, a:expr))
+    return s:RangesAndLines(a:startLnum, a:endLnum, ingo#ranges#FromMatch(a:startLnum, a:endLnum, a:expr))
 endfunction
 function! AdvancedSorters#Reorder#ByMatchAndLines( startLnum, endLnum, arguments ) abort
     return s:PatternAndExpressionCommand(
@@ -221,13 +221,13 @@ function! s:RangeAndExpressionCommand( GetRanges, Ranger, startLnum, endLnum, ar
 endfunction
 function! AdvancedSorters#Reorder#OnlyByRange( startLnum, endLnum, arguments ) abort
     return s:RangeAndExpressionCommand(
-    \   function('AdvancedSorters#GetRanges#FromRange'), function('s:ReorderOriginalRanges'),
+    \   function('ingo#ranges#FromRange'), function('s:ReorderOriginalRanges'),
     \   a:startLnum, a:endLnum, a:arguments
     \)
 endfunction
 
 function! s:RangesFromRangeAndNonMatches( startLnum, endLnum, range ) abort
-    return s:RangesAndNonMatches(a:startLnum, a:endLnum, AdvancedSorters#GetRanges#FromRange(a:startLnum, a:endLnum, a:range))
+    return s:RangesAndNonMatches(a:startLnum, a:endLnum, ingo#ranges#FromRange(a:startLnum, a:endLnum, a:range))
 endfunction
 function! AdvancedSorters#Reorder#ByRangeAndNonMatches( startLnum, endLnum, arguments ) abort
     return s:RangeAndExpressionCommand(
@@ -237,7 +237,7 @@ function! AdvancedSorters#Reorder#ByRangeAndNonMatches( startLnum, endLnum, argu
 endfunction
 
 function! s:RangesFromRangeAndLines( startLnum, endLnum, range ) abort
-    return s:RangesAndLines(a:startLnum, a:endLnum, AdvancedSorters#GetRanges#FromRange(a:startLnum, a:endLnum, a:range))
+    return s:RangesAndLines(a:startLnum, a:endLnum, ingo#ranges#FromRange(a:startLnum, a:endLnum, a:range))
 endfunction
 function! AdvancedSorters#Reorder#ByRangeAndLines( startLnum, endLnum, arguments ) abort
     return s:RangeAndExpressionCommand(
